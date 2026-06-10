@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Junky HSC — Admin</title>
+<style>
+  :root { --ink:#1a1f1c; --paper:#f3f0e9; --steel:#3a4a3f; --hi:#d6552b; --hi-dark:#b8431f; --line:#d4cfc2; --muted:#6b6f68; --good:#2f6f4f; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Helvetica Neue',Arial,sans-serif; background:var(--paper); color:var(--ink); -webkit-font-smoothing:antialiased; }
+  .wrap { max-width:900px; margin:0 auto; padding:24px 20px 64px; }
+  h1 { font-size:28px; font-weight:800; margin-bottom:4px; }
+  .sub { color:var(--muted); font-size:14px; margin-bottom:24px; }
+  /* login */
+  .login { max-width:340px; margin:80px auto; background:#fff; border:1.5px solid var(--line); border-radius:10px; padding:28px; }
+  .login h2 { font-size:20px; font-weight:800; margin-bottom:16px; }
+  .login input { width:100%; border:1.5px solid var(--line); border-radius:8px; padding:12px 14px; font-size:16px; font-family:inherit; margin-bottom:12px; }
+  .login input:focus { outline:none; border-color:var(--hi); }
+  .login button { width:100%; background:var(--hi); color:#fff; border:none; border-radius:8px; padding:14px; font-size:16px; font-weight:800; cursor:pointer; font-family:inherit; }
+  .login .err { color:var(--hi-dark); font-size:13px; margin-top:8px; }
+  /* stats bar */
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:24px; }
+  .stat { background:#fff; border:1.5px solid var(--line); border-radius:10px; padding:16px; }
+  .stat .n { font-size:28px; font-weight:800; }
+  .stat .l { font-size:13px; color:var(--muted); }
+  /* jobs */
+  .job { background:#fff; border:1.5px solid var(--line); border-radius:10px; padding:18px; margin-bottom:12px; }
+  .job-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .job-name { font-size:18px; font-weight:800; }
+  .job-price { font-size:18px; font-weight:800; color:var(--hi); white-space:nowrap; }
+  .job-meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+  .tag { background:var(--paper); border-radius:4px; padding:3px 8px; font-size:13px; color:var(--steel); }
+  .tag.new { background:#fdf3ee; color:var(--hi-dark); font-weight:700; }
+  .tag.done { background:#e8f4ee; color:var(--good); font-weight:700; }
+  .job-actions { display:flex; gap:8px; margin-top:12px; }
+  .btn { border:none; border-radius:6px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; }
+  .btn-done { background:var(--good); color:#fff; }
+  .btn-call { background:var(--steel); color:#fff; }
+  .empty { text-align:center; padding:60px 20px; color:var(--muted); }
+  .loading { text-align:center; padding:60px 20px; color:var(--muted); font-size:18px; }
+  .top-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .logout { font-size:13px; color:var(--muted); cursor:pointer; text-decoration:underline; }
+  .filter { display:flex; gap:8px; margin-bottom:16px; }
+  .filter button { border:1.5px solid var(--line); border-radius:6px; padding:6px 14px; font-size:13px; font-weight:700; cursor:pointer; background:#fff; font-family:inherit; }
+  .filter button.on { border-color:var(--hi); background:#fdf3ee; color:var(--hi-dark); }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login">
+    <h2>Junky HSC Admin</h2>
+    <input type="password" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter')tryLogin()">
+    <button onclick="tryLogin()">Log in</button>
+    <div class="err" id="loginErr"></div>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div id="dashboard" style="display:none">
+  <div class="wrap">
+    <div class="top-bar">
+      <div>
+        <h1>Junky HSC Jobs</h1>
+        <div class="sub" id="lastRefresh">Loading...</div>
+      </div>
+      <span class="logout" onclick="logout()">Log out</span>
+    </div>
+
+    <div class="stats" id="stats"></div>
+
+    <div class="filter" id="filterBar">
+      <button class="on" data-f="all" onclick="setFilter('all',this)">All jobs</button>
+      <button data-f="new" onclick="setFilter('new',this)">New</button>
+      <button data-f="done" onclick="setFilter('done',this)">Done</button>
+    </div>
+
+    <div id="jobList"><div class="loading">Loading jobs…</div></div>
+  </div>
+</div>
+
+<script>
+  const SUPABASE_URL = "https://okogabnckgvxlruhmniu.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rb2dhYm5ja2d2eGxydWhtbml1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNDk2NzMsImV4cCI6MjA5NjYyNTY3M30.peGdhDaxF2UaMeqC7HcAEMmry6Z4DRmIyaiAhM0KHpA";
+
+  // ─── SET YOUR ADMIN PASSWORD HERE ─────────────────────────
+  const ADMIN_PASSWORD = "junkyhsc2024";  // CHANGE THIS before going live
+
+  let allJobs = [], currentFilter = "all";
+
+  function tryLogin(){
+    const pw = document.getElementById("pwInput").value;
+    if(pw === ADMIN_PASSWORD){
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("dashboard").style.display = "block";
+      loadJobs();
+    } else {
+      document.getElementById("loginErr").textContent = "Wrong password";
+    }
+  }
+
+  function logout(){
+    document.getElementById("loginScreen").style.display = "block";
+    document.getElementById("dashboard").style.display = "none";
+    document.getElementById("pwInput").value = "";
+  }
+
+  async function loadJobs(){
+    document.getElementById("jobList").innerHTML = '<div class="loading">Loading jobs…</div>';
+    try {
+      const r = await fetch(SUPABASE_URL+"/rest/v1/bookings?order=id.desc", {
+        headers:{ "apikey": SUPABASE_KEY, "Authorization": "Bearer "+SUPABASE_KEY }
+      });
+      allJobs = await r.json();
+      renderStats();
+      renderJobs();
+      document.getElementById("lastRefresh").textContent = "Last updated: "+new Date().toLocaleTimeString();
+    } catch(e){
+      document.getElementById("jobList").innerHTML = '<div class="empty">Failed to load — check your connection.</div>';
+    }
+  }
+
+  function renderStats(){
+    const total = allJobs.length;
+    const newJobs = allJobs.filter(j=>j.status==="new").length;
+    const revenue = allJobs.reduce((s,j)=>s+(j.starting_price||0),0);
+    document.getElementById("stats").innerHTML = `
+      <div class="stat"><div class="n">${total}</div><div class="l">Total bookings</div></div>
+      <div class="stat"><div class="n" style="color:var(--hi)">${newJobs}</div><div class="l">Need attention</div></div>
+      <div class="stat"><div class="n">$${revenue.toLocaleString()}</div><div class="l">Starting price total</div></div>
+    `;
+  }
+
+  function setFilter(f, btn){
+    currentFilter = f;
+    document.querySelectorAll(".filter button").forEach(b=>b.classList.remove("on"));
+    btn.classList.add("on");
+    renderJobs();
+  }
+
+  function renderJobs(){
+    const jobs = currentFilter==="all" ? allJobs : allJobs.filter(j=>j.status===currentFilter);
+    if(!jobs.length){
+      document.getElementById("jobList").innerHTML = '<div class="empty">No jobs here yet.</div>';
+      return;
+    }
+    document.getElementById("jobList").innerHTML = jobs.map(j=>`
+      <div class="job" id="job-${j.id}">
+        <div class="job-top">
+          <div class="job-name">${j.name || "Unknown"}</div>
+          <div class="job-price">$${j.starting_price || 0}+</div>
+        </div>
+        <div class="job-meta">
+          <span class="tag ${j.status==='new'?'new':'done'}">${j.status==='new'?'NEW':'DONE'}</span>
+          <span class="tag">📅 ${j.pickup_date||'No date'} ${j.time_window||''}</span>
+          <span class="tag">📦 ${j.load||'Unknown load'}</span>
+          ${j.addons&&j.addons!=='none'?`<span class="tag">+ ${j.addons}</span>`:''}
+          <span class="tag">📍 ${j.address||'No address'}, ${j.zip||''}</span>
+          <span class="tag">📞 ${j.phone||'No phone'}</span>
+          ${j.email?`<span class="tag">✉ ${j.email}</span>`:''}
+        </div>
+        <div class="job-actions">
+          ${j.phone?`<button class="btn btn-call" onclick="window.location='tel:${j.phone}'">Call ${j.name||'customer'}</button>`:''}
+          ${j.status==='new'?`<button class="btn btn-done" onclick="markDone(${j.id})">Mark done</button>`:''}
+        </div>
+      </div>
+    `).join("");
+  }
+
+  async function markDone(id){
+    await fetch(SUPABASE_URL+"/rest/v1/bookings?id=eq."+id, {
+      method:"PATCH",
+      headers:{ "Content-Type":"application/json", "apikey":SUPABASE_KEY, "Authorization":"Bearer "+SUPABASE_KEY },
+      body: JSON.stringify({ status:"done" })
+    });
+    allJobs = allJobs.map(j=>j.id===id?{...j,status:"done"}:j);
+    renderStats(); renderJobs();
+  }
+
+  // auto-refresh every 60 seconds
+  setInterval(loadJobs, 60000);
+</script>
+</body>
+</html>

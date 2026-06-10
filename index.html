@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Junky HSC — Junk Removal KC</title>
+<style>
+  :root {
+    --ink: #1a1f1c; --paper: #f3f0e9; --steel: #3a4a3f;
+    --hi: #d6552b; --hi-dark: #b8431f; --line: #d4cfc2;
+    --muted: #6b6f68; --good: #2f6f4f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; background: var(--paper); color: var(--ink); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 24px 20px 64px; }
+  header { padding: 16px 0 28px; }
+  .badge { display: inline-block; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--hi-dark); font-weight: 700; border: 1.5px solid var(--hi); border-radius: 2px; padding: 4px 9px; }
+  h1 { font-size: clamp(30px, 8vw, 44px); line-height: 1.02; margin: 16px 0 8px; font-weight: 800; letter-spacing: -0.02em; }
+  h1 .swing { color: var(--hi); }
+  .sub { color: var(--muted); font-size: 16px; max-width: 38ch; }
+  .card { background: #fff; border: 1.5px solid var(--line); border-radius: 10px; padding: 22px; margin-top: 22px; }
+  .step-num { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--hi-dark); font-weight: 700; margin-bottom: 4px; }
+  .step-q { font-size: 19px; font-weight: 700; margin-bottom: 14px; }
+  .fills { display: grid; gap: 10px; }
+  .fill { display: flex; align-items: center; gap: 14px; width: 100%; border: 1.5px solid var(--line); border-radius: 8px; background: #fff; padding: 14px 16px; cursor: pointer; text-align: left; transition: .12s; font-size: 16px; color: var(--ink); }
+  .fill:hover { border-color: var(--steel); }
+  .fill.on { border-color: var(--hi); background: #fdf3ee; box-shadow: 0 0 0 1px var(--hi) inset; }
+  .gauge { width: 30px; height: 38px; border: 2px solid var(--steel); border-radius: 3px; position: relative; flex: 0 0 auto; overflow: hidden; }
+  .gauge i { position: absolute; bottom: 0; left: 0; right: 0; background: var(--hi); display: block; }
+  .fill .label { font-weight: 700; }
+  .fill .ex { color: var(--muted); font-size: 13px; display: block; font-weight: 400; }
+  .fill .price { margin-left: auto; font-weight: 700; color: var(--steel); white-space: nowrap; }
+  label.q { display: block; font-weight: 700; margin: 0 0 8px; font-size: 16px; }
+  input[type=text], input[type=tel], input[type=email], input[type=date] { width: 100%; border: 1.5px solid var(--line); border-radius: 8px; padding: 13px 14px; font-size: 16px; font-family: inherit; background: #fff; }
+  input:focus { outline: none; border-color: var(--hi); }
+  .addons { display: grid; gap: 8px; }
+  .addon { display: flex; align-items: center; gap: 12px; border: 1.5px solid var(--line); border-radius: 8px; padding: 11px 14px; cursor: pointer; font-size: 15px; }
+  .addon.on { border-color: var(--hi); background: #fdf3ee; }
+  .addon input { width: 18px; height: 18px; accent-color: var(--hi); }
+  .addon .plus { margin-left: auto; color: var(--muted); font-weight: 700; }
+  .windows { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .win { border: 1.5px solid var(--line); border-radius: 8px; padding: 12px 6px; text-align: center; cursor: pointer; font-size: 14px; font-weight: 700; background:#fff; color: var(--ink); }
+  .win .t { display:block; font-weight: 400; color: var(--muted); font-size: 12px; }
+  .win.on { border-color: var(--hi); background: #fdf3ee; }
+  .quote { margin-top: 22px; background: var(--steel); color: #fff; border-radius: 10px; padding: 24px; text-align: center; }
+  .quote .lead { font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; opacity: .8; }
+  .quote .amt { font-size: 52px; font-weight: 800; letter-spacing: -0.02em; margin: 4px 0; }
+  .quote .amt small { font-size: 20px; opacity: .7; font-weight: 600; }
+  .quote .note { font-size: 14px; opacity: .85; max-width: 32ch; margin: 6px auto 0; }
+  .quote.warn { background: #6b3a2a; }
+  .book { display: block; width: 100%; margin-top: 16px; background: var(--hi); color: #fff; border: none; border-radius: 8px; padding: 17px; font-size: 18px; font-weight: 800; cursor: pointer; font-family: inherit; transition: .12s; }
+  .book:hover { background: var(--hi-dark); }
+  .book:disabled { background: #c9c4b8; cursor: not-allowed; }
+  .fineprint { color: var(--muted); font-size: 13px; text-align: center; margin-top: 14px; }
+  .hidden { display: none; }
+  .done { text-align: center; padding: 40px 10px; }
+  .done .check { width: 64px; height: 64px; border-radius: 50%; background: var(--good); color:#fff; font-size: 36px; line-height: 64px; margin: 0 auto 18px; }
+  .done h2 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+  .done .recap { background:#fff; border:1.5px solid var(--line); border-radius:10px; padding:18px; text-align:left; margin: 20px 0; }
+  .done .recap div { display:flex; justify-content:space-between; padding: 6px 0; border-bottom:1px solid var(--line); font-size:15px; }
+  .done .recap div:last-child { border:none; }
+  .done .recap .k { color: var(--muted); }
+  .done .recap .v { font-weight:700; text-align:right; }
+  .err { background: #fdf3ee; border: 1.5px solid var(--hi); border-radius: 8px; padding: 12px 14px; color: var(--hi-dark); font-size: 14px; margin-top: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <header>
+    <span class="badge">Same-day junk removal · Kansas City</span>
+    <h1>Price in 30 seconds.<br><span class="swing">We haul the rest.</span></h1>
+    <p class="sub">Tell us what you've got. Get a real starting price right now — no waiting on a callback.</p>
+  </header>
+
+  <div class="card">
+    <div class="step-num">Step 1</div>
+    <div class="step-q">How much junk are we talking?</div>
+    <div class="fills" id="fills">
+      <button class="fill" data-key="A few items" data-price="100"><span class="gauge"><i style="height:12%"></i></span><span><span class="label">Just a few items</span><span class="ex">A couch, a mattress, some boxes</span></span><span class="price">from $100</span></button>
+      <button class="fill" data-key="Quarter trailer" data-price="175"><span class="gauge"><i style="height:25%"></i></span><span><span class="label">Quarter trailer</span><span class="ex">A small room's worth</span></span><span class="price">from $175</span></button>
+      <button class="fill" data-key="Half trailer" data-price="275"><span class="gauge"><i style="height:50%"></i></span><span><span class="label">Half trailer</span><span class="ex">A garage or big closet cleanout</span></span><span class="price">from $275</span></button>
+      <button class="fill" data-key="Three-quarter trailer" data-price="375"><span class="gauge"><i style="height:75%"></i></span><span><span class="label">Three-quarter trailer</span><span class="ex">Most of a garage or basement</span></span><span class="price">from $375</span></button>
+      <button class="fill" data-key="Full trailer" data-price="450"><span class="gauge"><i style="height:100%"></i></span><span><span class="label">Full trailer</span><span class="ex">A whole garage, big move-out</span></span><span class="price">from $450</span></button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-num">Step 2</div>
+    <div class="step-q">Anything extra? <span style="font-weight:400;color:var(--muted);font-size:15px">(optional)</span></div>
+    <div class="addons" id="addons">
+      <label class="addon"><input type="checkbox" data-price="40" data-label="Appliances"> Appliances (fridge, washer, stove) <span class="plus">+$40</span></label>
+      <label class="addon"><input type="checkbox" data-price="50" data-label="Heavy items"> Heavy stuff (hot tub, concrete, dirt) <span class="plus">+$50</span></label>
+      <label class="addon"><input type="checkbox" data-price="25" data-label="Stairs/long carry"> Stairs / long carry <span class="plus">+$25</span></label>
+      <label class="addon"><input type="checkbox" data-price="30" data-label="Tires/mattresses"> Tires or mattresses (special dump fee) <span class="plus">+$30</span></label>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-num">Step 3</div>
+    <div class="step-q">When works for you?</div>
+    <label class="q" for="date">Pickup day</label>
+    <input type="date" id="date" style="margin-bottom:16px">
+    <label class="q">Time of day</label>
+    <div class="windows" id="windows">
+      <button class="win" data-key="Morning">Morning<span class="t">8am–12pm</span></button>
+      <button class="win" data-key="Afternoon">Afternoon<span class="t">12–5pm</span></button>
+      <button class="win" data-key="Evening">Evening<span class="t">5–8pm</span></button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="step-num">Step 4</div>
+    <div class="step-q">Where and who?</div>
+    <label class="q" for="address">Pickup address</label>
+    <input type="text" id="address" placeholder="Street address" style="margin-bottom:12px">
+    <label class="q" for="zip">ZIP code</label>
+    <input type="text" id="zip" inputmode="numeric" maxlength="5" placeholder="e.g. 64111" style="margin-bottom:16px">
+    <label class="q" for="name">Your name</label>
+    <input type="text" id="name" placeholder="First name" style="margin-bottom:12px">
+    <label class="q" for="phone">Phone</label>
+    <input type="tel" id="phone" placeholder="(816) 555-0123" style="margin-bottom:12px">
+    <label class="q" for="email">Email (confirmation sent here)</label>
+    <input type="email" id="email" placeholder="you@email.com">
+  </div>
+
+  <div id="quoteBox" class="quote hidden">
+    <div class="lead">Your starting price</div>
+    <div class="amt" id="amt">$0</div>
+    <p class="note" id="quoteNote">Final price confirmed on-site once the crew sees the load.</p>
+  </div>
+
+  <div id="errBox" class="err hidden"></div>
+  <button class="book" id="bookBtn" disabled>Pick how much junk first</button>
+  <p class="fineprint">Book now, pay when the job's done. No deposit required.</p>
+</div>
+
+<script>
+  // ─── CONFIG ───────────────────────────────────────────────
+  const SUPABASE_URL = "https://okogabnckgvxlruhmniu.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rb2dhYm5ja2d2eGxydWhtbml1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNDk2NzMsImV4cCI6MjA5NjYyNTY3M30.peGdhDaxF2UaMeqC7HcAEMmry6Z4DRmIyaiAhM0KHpA";
+
+  // ─── SERVICE AREA zips (within ~40 min of KC) ─────────────
+  // ADD YOUR REAL ZIPS HERE — these are examples
+  const SERVICE_ZIPS = [
+    "64101","64102","64105","64106","64108","64109","64110","64111","64112",
+    "64113","64114","64116","64117","64118","64119","64120","64123","64124",
+    "64125","64126","64127","64128","64129","64130","64131","64132","64133",
+    "64134","64136","64137","64138","64139","64145","64146","64147","64149",
+    "64150","64151","64152","64153","64154","64155","64156","64157","64158",
+    "64161","64163","64164","64165","64166","64167","64168","64170",
+    "66101","66102","66103","66104","66105","66106","66109","66111","66112",
+    "66202","66203","66204","66205","66206","66207","66208","66209","66210",
+    "66211","66212","66213","66214","66215","66216","66217","66218","66219",
+    "66220","66221","66223","66224","66226","66227"
+  ];
+
+  // ─── CREW EMAIL — set this to your friends' email ─────────
+  const CREW_EMAIL = "crew@junkyhsc.com"; // CHANGE THIS
+
+  const state = { fillKey:"", fillPrice:0, addonTotal:0, addons:[], window:"" };
+  const $ = id => document.getElementById(id);
+
+  const fills=$("fills"), addonsEl=$("addons"), windows=$("windows"),
+        quoteBox=$("quoteBox"), amt=$("amt"), quoteNote=$("quoteNote"),
+        bookBtn=$("bookBtn"), zipEl=$("zip"), dateEl=$("date"), errBox=$("errBox");
+
+  dateEl.min = new Date().toISOString().split("T")[0];
+
+  fills.addEventListener("click", e => {
+    const b = e.target.closest(".fill"); if(!b) return;
+    [...fills.children].forEach(x=>x.classList.remove("on"));
+    b.classList.add("on"); state.fillPrice=+b.dataset.price; state.fillKey=b.dataset.key; update();
+  });
+  addonsEl.addEventListener("change", () => {
+    state.addonTotal=0; state.addons=[];
+    addonsEl.querySelectorAll("input").forEach(cb=>{
+      cb.closest(".addon").classList.toggle("on",cb.checked);
+      if(cb.checked){ state.addonTotal+=+cb.dataset.price; state.addons.push(cb.dataset.label); }
+    });
+    update();
+  });
+  windows.addEventListener("click", e => {
+    const b=e.target.closest(".win"); if(!b) return;
+    [...windows.children].forEach(x=>x.classList.remove("on"));
+    b.classList.add("on"); state.window=b.dataset.key; update();
+  });
+  zipEl.addEventListener("input", update);
+
+  function total(){ return state.fillPrice + state.addonTotal; }
+
+  function update(){
+    errBox.classList.add("hidden");
+    if(!state.fillPrice){
+      quoteBox.classList.add("hidden");
+      bookBtn.disabled=true; bookBtn.textContent="Pick how much junk first"; return;
+    }
+    const z=zipEl.value.trim();
+    if(z.length===5 && !SERVICE_ZIPS.includes(z)){
+      quoteBox.classList.remove("hidden"); quoteBox.classList.add("warn");
+      amt.textContent="Just outside our area";
+      quoteNote.textContent="That ZIP is past our normal range — text us and we'll see if we can make it work.";
+      bookBtn.disabled=true; bookBtn.textContent="Outside service area"; return;
+    }
+    quoteBox.classList.remove("hidden"); quoteBox.classList.remove("warn");
+    amt.innerHTML="$"+total()+" <small>+</small>";
+    quoteNote.textContent="Starting price. Final amount confirmed on-site once the crew sees the load.";
+    bookBtn.disabled=false; bookBtn.textContent="Book this pickup →";
+  }
+
+  bookBtn.addEventListener("click", submitBooking);
+
+  async function submitBooking(){
+    if(bookBtn.disabled) return;
+    const booking = {
+      load: state.fillKey,
+      addons: state.addons.join(", ") || "none",
+      starting_price: total(),
+      pickup_date: dateEl.value || "",
+      time_window: state.window || "",
+      address: $("address").value.trim(),
+      zip: zipEl.value.trim(),
+      name: $("name").value.trim(),
+      phone: $("phone").value.trim(),
+      email: $("email").value.trim(),
+      status: "new"
+    };
+
+    const missing = [];
+    if(!booking.pickup_date) missing.push("pickup day");
+    if(!booking.time_window) missing.push("time of day");
+    if(!booking.address) missing.push("address");
+    if(!booking.name) missing.push("name");
+    if(!booking.phone) missing.push("phone");
+    if(missing.length){
+      errBox.textContent = "Just need a bit more: " + missing.join(", ");
+      errBox.classList.remove("hidden");
+      errBox.scrollIntoView({behavior:"smooth", block:"center"});
+      return;
+    }
+
+    bookBtn.disabled=true; bookBtn.textContent="Booking…";
+
+    // 1. Save to Supabase
+    let saved = false;
+    try {
+      const r = await fetch(SUPABASE_URL+"/rest/v1/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer "+SUPABASE_KEY,
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify(booking)
+      });
+      saved = r.ok;
+      if(!r.ok){ const t=await r.text(); console.error("Supabase error:", t); }
+    } catch(e){ console.error("Supabase fetch failed:", e); }
+
+    // 2. Send email via Resend (needs to go through your backend — see note below)
+    // For now we log it; hook up after Vercel deploy with an API route
+    console.log("📬 New booking — email would go to crew:", booking);
+
+    showConfirmation(booking, saved);
+  }
+
+  function showConfirmation(b, saved){
+    $("app").innerHTML = `
+      <div class="done">
+        <div class="check">✓</div>
+        <h2>You're booked${b.name ? ", "+b.name : ""}!</h2>
+        <p class="sub" style="margin:0 auto 0">The crew will reach out to confirm. Pay on the day of the job.</p>
+        <div class="recap">
+          <div><span class="k">Load</span><span class="v">${b.load}</span></div>
+          ${b.addons!=="none"?`<div><span class="k">Extras</span><span class="v">${b.addons}</span></div>`:""}
+          <div><span class="k">Starting price</span><span class="v">$${b.starting_price}+</span></div>
+          <div><span class="k">Date</span><span class="v">${b.pickup_date}</span></div>
+          <div><span class="k">Time</span><span class="v">${b.time_window}</span></div>
+          <div><span class="k">Address</span><span class="v">${b.address}</span></div>
+          <div><span class="k">Phone</span><span class="v">${b.phone}</span></div>
+        </div>
+        <p class="fineprint">${saved ? "✓ Booking saved. See you soon." : "⚠ Booking saved locally — check Supabase keys if this persists."}</p>
+      </div>`;
+    window.scrollTo(0,0);
+  }
+</script>
+</body>
+</html>
