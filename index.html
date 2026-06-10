@@ -5,171 +5,622 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HaulKC — Same-Day Junk Removal Kansas City</title>
 <style>
-  :root {
-    --ink: #1a1f1c; --paper: #f3f0e9; --steel: #3a4a3f;
-    --hi: #d6552b; --hi-dark: #b8431f; --line: #d4cfc2;
-    --muted: #6b6f68; --good: #2f6f4f;
-  }
+/* ============================================================
+   HaulKC — Webfonts
+   SUBSTITUTION NOTE: the source site shipped system Helvetica
+   Neue/Arial. For a bolder industrial voice we standardize on
+   Archivo (display + body) and Spline Sans Mono (data/labels),
+   served from Google Fonts. Swap in licensed binaries if desired.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Spline+Sans+Mono:wght@400;500;600&display=swap');
+
+/* ============================================================
+   HaulKC — Color tokens
+   Dark, industrial, trustworthy. Forest green + muted gold on
+   warm off-white. No bright colors. No orange.
+   ============================================================ */
+
+:root {
+  /* ---- Forest green scale (the spine of the brand) ---- */
+  --green-950: #0c1b13;  /* near-black green — deepest backdrops */
+  --green-900: #102619;  /* hero/footer backdrop */
+  --green-850: #142f20;  /* raised dark surface */
+  --green-800: #16341f;
+  --green-700: #1a3a2a;  /* PRIMARY brand green */
+  --green-600: #224b34;  /* hover/lift of primary */
+  --green-500: #2c5e41;
+  --green-400: #3f7a57;  /* muted mid green */
+  --green-300: #5e9a76;  /* success/positive */
+  --green-200: #8fbca2;  /* tint on dark */
+  --green-100: #c2dccd;  /* faint tint */
+
+  /* ---- Warm off-white / paper (text + light surfaces) ---- */
+  --paper-50:  #faf8f3;  /* lightest card surface */
+  --paper-100: #f0ede6;  /* PRIMARY paper / page bg */
+  --paper-200: #e7e3d8;  /* sunk surface on light */
+  --paper-300: #d8d3c4;  /* hairlines on light */
+  --paper-400: #c4beac;  /* disabled / faint */
+
+  /* ---- Muted gold (accent — sparing) ---- */
+  --gold-700: #8a6f3f;  /* deep gold, text on light */
+  --gold-600: #a98b54;  /* gold dim */
+  --gold-500: #c8a96e;  /* PRIMARY gold accent */
+  --gold-400: #d8bc83;  /* bright gold — glow / hover */
+  --gold-300: #e6d2a6;  /* gold tint */
+
+  /* ---- Warm neutrals (text + structure) ---- */
+  --ink-900: #111c15;  /* darkest text on light */
+  --ink-700: #2a352d;  /* body text on light */
+  --steel-600: #4a5650; /* secondary text on light */
+  --steel-500: #6b756d; /* muted text / captions */
+  --steel-400: #8a938b; /* faint text */
+
+  /* ---- Semantic raw (muted, never neon) ---- */
+  --success-500: #3f7a57; /* uses the green family */
+  --danger-600:  #8f4a3e; /* muted brick — NOT orange */
+  --danger-500:  #a55a4c;
+  --danger-tint: #f1e3df;
+  --warning-500: #a98b54; /* leans into gold */
+
+  /* ============================================================
+     SEMANTIC ALIASES  — reference these in components
+     ============================================================ */
+
+  /* Surfaces — dark mode (hero/app/footer) */
+  --surface-base:     var(--green-900);   /* page backdrop, dark */
+  --surface-raised:   var(--green-850);   /* card on dark */
+  --surface-sunk:     var(--green-950);   /* well / input on dark */
+  --surface-primary:  var(--green-700);   /* brand-green panels */
+
+  /* Surfaces — light mode (forms/docs/admin) */
+  --surface-paper:    var(--paper-100);   /* light page backdrop */
+  --surface-card:     var(--paper-50);    /* card on light */
+  --surface-card-sunk:var(--paper-200);   /* sunk panel on light */
+
+  /* Text */
+  --text-strong:    var(--ink-900);   /* headings on light */
+  --text-body:      var(--ink-700);   /* body on light */
+  --text-muted:     var(--steel-500); /* captions on light */
+  --text-on-dark:   var(--paper-100); /* body on dark green */
+  --text-on-dark-muted: var(--green-200); /* muted on dark */
+  --text-accent:    var(--gold-700);  /* gold text on light */
+  --text-accent-on-dark: var(--gold-500); /* gold text on dark */
+
+  /* Borders / lines */
+  --border-light:   var(--paper-300); /* hairline on light */
+  --border-strong:  var(--ink-700);
+  --border-dark:    rgba(240,237,230,0.12); /* hairline on dark */
+  --border-gold:    var(--gold-500);
+
+  /* Interactive — buttons */
+  --action-primary:        var(--green-700);
+  --action-primary-hover:  var(--green-600);
+  --action-primary-press:  var(--green-800);
+  --action-accent:         var(--gold-500);
+  --action-accent-hover:   var(--gold-400);
+  --action-disabled:       var(--paper-400);
+
+  /* Focus / glow */
+  --focus-ring:   var(--gold-500);
+  --glow-green:   0 0 0 1px rgba(200,169,110,0.0), 0 8px 24px -8px rgba(12,27,19,0.55);
+  --glow-gold:    0 0 24px -6px rgba(200,169,110,0.45);
+
+  /* Feedback */
+  --fb-success:   var(--success-500);
+  --fb-danger:    var(--danger-600);
+  --fb-warning:   var(--warning-500);
+}
+
+/* ============================================================
+   HaulKC — Typography tokens
+   Archivo for everything (clean, bold, industrial grotesque).
+   Spline Sans Mono for prices, ZIPs, eyebrows and crew data.
+   ============================================================ */
+
+:root {
+  /* ---- Families ---- */
+  --font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --font-body:    'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:    'Spline Sans Mono', 'SF Mono', ui-monospace, monospace;
+
+  /* ---- Weights ---- */
+  --fw-regular:  400;  /* @kind font */
+  --fw-medium:   500;  /* @kind font */
+  --fw-semibold: 600;  /* @kind font */
+  --fw-bold:     700;  /* @kind font */
+  --fw-extrabold:800;  /* @kind font */
+  --fw-black:    900;  /* @kind font */
+
+  /* ---- Display / headline scale (tight, heavy) ---- */
+  --text-display: 800 clamp(40px, 7vw, 72px)/0.98 var(--font-display);
+  --text-h1:      800 clamp(30px, 5vw, 46px)/1.02 var(--font-display);
+  --text-h2:      700 clamp(24px, 3.4vw, 32px)/1.08 var(--font-display);
+  --text-h3:      700 20px/1.2 var(--font-display);
+  --text-h4:      700 17px/1.25 var(--font-display);
+
+  /* ---- Body scale ---- */
+  --text-lead:    400 19px/1.5 var(--font-body);
+  --text-base:    400 16px/1.55 var(--font-body);
+  --text-sm:      400 14px/1.5 var(--font-body);
+  --text-xs:      500 13px/1.45 var(--font-body);
+
+  /* ---- Eyebrow / label (uppercase, tracked, mono) ---- */
+  --text-eyebrow: 600 12px/1.3 var(--font-mono);
+  --text-data:    500 15px/1.4 var(--font-mono);   /* prices, ZIPs */
+  --text-data-lg: 800 clamp(40px,8vw,56px)/1 var(--font-mono); /* big quote number */
+
+  /* ---- Letter-spacing ---- */
+  --tracking-display: -0.02em;
+  --tracking-tight:   -0.01em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.08em;
+  --tracking-eyebrow: 0.14em;   /* uppercase eyebrows */
+}
+
+/* ============================================================
+   HaulKC — Spacing & layout tokens
+   8px base rhythm. Tight, utilitarian.
+   ============================================================ */
+
+:root {
+  /* ---- Spacing scale (8px base) ---- */
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* ---- Container widths ---- */
+  --container-form:  560px;   /* booking flow column */
+  --container-admin: 900px;   /* admin dashboard */
+  --container-page:  1120px;  /* marketing width */
+  --gutter:          20px;    /* page side padding (mobile) */
+  --gutter-lg:       32px;
+
+  /* ---- Component sizing ---- */
+  --control-h:    52px;   /* inputs, big buttons */
+  --control-h-sm: 40px;
+  --tap-min:      44px;   /* minimum hit target */
+}
+
+/* ============================================================
+   HaulKC — Effects: radii, borders, shadows, motion
+   Restrained. Crisp 1.5px lines. Subtle green glow on dark.
+   ============================================================ */
+
+:root {
+  /* ---- Corner radii (modest, industrial) ---- */
+  --radius-xs:  3px;   /* tags, badges */
+  --radius-sm:  6px;   /* buttons, chips */
+  --radius-md:  8px;   /* inputs */
+  --radius-lg:  10px;  /* cards */
+  --radius-xl:  14px;  /* hero panels */
+  --radius-pill: 999px;
+
+  /* ---- Border widths ---- */
+  --border-hair: 1px;
+  --border-mid:  1.5px;   /* the brand's signature crisp line */
+  --border-thick:2px;
+
+  /* ---- Shadows (cool, low, never fluffy) ---- */
+  --shadow-xs:  0 1px 2px rgba(12,27,19,0.06);
+  --shadow-sm:  0 2px 6px rgba(12,27,19,0.08);
+  --shadow-md:  0 6px 18px -6px rgba(12,27,19,0.18);
+  --shadow-lg:  0 18px 40px -16px rgba(12,27,19,0.32);
+  --shadow-card-dark: 0 12px 32px -12px rgba(0,0,0,0.55);
+
+  /* Inset focus highlight used on selected fills */
+  --inset-accent: inset 0 0 0 1.5px var(--gold-500);
+  --inset-green:  inset 0 0 0 1.5px var(--green-700);
+
+  /* Subtle green-button glow */
+  --glow-btn: 0 6px 18px -8px rgba(26,58,42,0.6), 0 0 0 1px rgba(200,169,110,0.10);
+  --glow-btn-hover: 0 8px 22px -8px rgba(26,58,42,0.7), 0 0 18px -4px rgba(200,169,110,0.28);
+
+  /* ---- Motion ---- */
+  --ease-out:  cubic-bezier(0.22, 0.61, 0.36, 1);  /* @kind other */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* @kind other */
+  --dur-fast:  120ms;  /* @kind other */
+  --dur-base:  180ms;  /* @kind other */
+  --dur-slow:  280ms;  /* @kind other */
+
+  /* press feedback */
+  --press-scale: 0.98;  /* @kind other */
+}
+
+/* ============================================================
+   HaulKC — Base element defaults (optional, opt-in helpers)
+   Kept minimal so consumers can layer freely.
+   ============================================================ */
+
+.hkc-root {
+  font: var(--text-base);
+  color: var(--text-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Utility: uppercase tracked eyebrow */
+.hkc-eyebrow {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--text-accent);
+}
+
+/* Selection uses gold tint */
+::selection { background: var(--gold-300); color: var(--ink-900); }
+
+</style>
+<style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Helvetica Neue', Arial, sans-serif; background: var(--paper); color: var(--ink); line-height: 1.5; -webkit-font-smoothing: antialiased; }
-  .wrap { max-width: 560px; margin: 0 auto; padding: 24px 20px 64px; }
-  header { padding: 16px 0 28px; }
-  .badge { display: inline-block; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--hi-dark); font-weight: 700; border: 1.5px solid var(--hi); border-radius: 2px; padding: 4px 9px; }
-  h1 { font-size: clamp(30px, 8vw, 44px); line-height: 1.02; margin: 16px 0 8px; font-weight: 800; letter-spacing: -0.02em; }
-  h1 .swing { color: var(--hi); }
-  .sub { color: var(--muted); font-size: 16px; max-width: 38ch; }
-  .trust-bar { display: flex; align-items: center; gap: 20px; margin-top: 18px; padding: 14px 16px; background: #fff; border: 1.5px solid var(--line); border-radius: 10px; flex-wrap: wrap; }
-  .trust-item { display: flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 600; color: var(--steel); }
-  .trust-item svg { flex-shrink: 0; }
-  .trust-phone { font-size: 15px; font-weight: 800; color: var(--hi-dark); text-decoration: none; margin-left: auto; }
-  .trust-phone:hover { text-decoration: underline; }
-  .card { background: #fff; border: 1.5px solid var(--line); border-radius: 10px; padding: 22px; margin-top: 22px; }
-  .step-num { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--hi-dark); font-weight: 700; margin-bottom: 4px; }
-  .step-q { font-size: 19px; font-weight: 700; margin-bottom: 14px; }
-  .fills { display: grid; gap: 10px; }
-  .fill { display: flex; align-items: center; gap: 14px; width: 100%; border: 1.5px solid var(--line); border-radius: 8px; background: #fff; padding: 14px 16px; cursor: pointer; text-align: left; transition: .12s; font-size: 16px; color: var(--ink); }
-  .fill:hover { border-color: var(--steel); }
-  .fill.on { border-color: var(--hi); background: #fdf3ee; box-shadow: 0 0 0 1px var(--hi) inset; }
-  .gauge { width: 30px; height: 38px; border: 2px solid var(--steel); border-radius: 3px; position: relative; flex: 0 0 auto; overflow: hidden; }
-  .gauge i { position: absolute; bottom: 0; left: 0; right: 0; background: var(--hi); display: block; }
-  .fill .label { font-weight: 700; }
-  .fill .ex { color: var(--muted); font-size: 13px; display: block; font-weight: 400; }
-  .fill .price { margin-left: auto; font-weight: 700; color: var(--steel); white-space: nowrap; }
-  label.q { display: block; font-weight: 700; margin: 0 0 8px; font-size: 16px; }
-  input[type=text], input[type=tel], input[type=email], input[type=date] { width: 100%; border: 1.5px solid var(--line); border-radius: 8px; padding: 13px 14px; font-size: 16px; font-family: inherit; background: #fff; }
-  input:focus { outline: none; border-color: var(--hi); }
-  .addons { display: grid; gap: 8px; }
-  .addon { display: flex; align-items: center; gap: 12px; border: 1.5px solid var(--line); border-radius: 8px; padding: 11px 14px; cursor: pointer; font-size: 15px; }
-  .addon.on { border-color: var(--hi); background: #fdf3ee; }
-  .addon input { width: 18px; height: 18px; accent-color: var(--hi); }
-  .addon .plus { margin-left: auto; color: var(--muted); font-weight: 700; }
-  .windows { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-  .win { border: 1.5px solid var(--line); border-radius: 8px; padding: 12px 6px; text-align: center; cursor: pointer; font-size: 14px; font-weight: 700; background:#fff; color: var(--ink); }
-  .win .t { display:block; font-weight: 400; color: var(--muted); font-size: 12px; }
-  .win.on { border-color: var(--hi); background: #fdf3ee; }
-  .quote { margin-top: 22px; background: var(--steel); color: #fff; border-radius: 10px; padding: 24px; text-align: center; }
-  .quote .lead { font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; opacity: .8; }
-  .quote .amt { font-size: 52px; font-weight: 800; letter-spacing: -0.02em; margin: 4px 0; }
-  .quote .amt small { font-size: 20px; opacity: .7; font-weight: 600; }
-  .quote .note { font-size: 14px; opacity: .85; max-width: 32ch; margin: 6px auto 0; }
-  .quote.warn { background: #6b3a2a; }
-  .book { display: block; width: 100%; margin-top: 16px; background: var(--hi); color: #fff; border: none; border-radius: 8px; padding: 17px; font-size: 18px; font-weight: 800; cursor: pointer; font-family: inherit; transition: .12s; }
-  .book:hover { background: var(--hi-dark); }
-  .book:disabled { background: #c9c4b8; cursor: not-allowed; }
-  .fineprint { color: var(--muted); font-size: 13px; text-align: center; margin-top: 14px; }
-  .hidden { display: none; }
-  .done { text-align: center; padding: 40px 10px; }
-  .done .check { width: 64px; height: 64px; border-radius: 50%; background: var(--good); color:#fff; font-size: 36px; line-height: 64px; margin: 0 auto 18px; }
-  .done h2 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
-  .done .recap { background:#fff; border:1.5px solid var(--line); border-radius:10px; padding:18px; text-align:left; margin: 20px 0; }
-  .done .recap div { display:flex; justify-content:space-between; padding: 6px 0; border-bottom:1px solid var(--line); font-size:15px; }
-  .done .recap div:last-child { border:none; }
-  .done .recap .k { color: var(--muted); }
-  .done .recap .v { font-weight:700; text-align:right; }
-  .err { background: #fdf3ee; border: 1.5px solid var(--hi); border-radius: 8px; padding: 12px 14px; color: var(--hi-dark); font-size: 14px; margin-top: 12px; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: var(--green-900);
+    color: var(--text-on-dark);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+  a { color: inherit; }
+
+  /* ---------- Header ---------- */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px clamp(20px, 5vw, 48px);
+    background: rgba(12,27,19,0.82);
+    backdrop-filter: blur(10px);
+    border-bottom: 1.5px solid var(--border-dark);
+  }
+  .brand { display: flex; align-items: center; gap: 11px; }
+  .brand img { width: 38px; height: 38px; }
+  .brand .word { font-family: var(--font-display); font-weight: 800; font-size: 22px; letter-spacing: -0.02em; color: var(--paper-100); line-height: 1; }
+  .brand .word .kc { color: var(--gold-500); }
+  .topbar .phone {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-weight: 600; font-size: 15px;
+    color: var(--gold-500); text-decoration: none;
+    padding: 9px 15px; border: 1.5px solid var(--border-gold); border-radius: var(--radius-sm);
+    transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
+  }
+  .topbar .phone:hover { background: var(--gold-500); color: var(--ink-900); }
+  .topbar .phone svg { width: 16px; height: 16px; }
+
+  /* ---------- Layout ---------- */
+  .shell { max-width: 1100px; margin: 0 auto; padding: 0 clamp(20px, 5vw, 48px) 120px; }
+  .grid { display: grid; grid-template-columns: 1fr; gap: 0; }
+  @media (min-width: 940px) {
+    .grid { grid-template-columns: 1.15fr 0.85fr; gap: 56px; align-items: start; }
+    .summary-col { position: sticky; top: 92px; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero { padding: clamp(48px, 8vw, 88px) 0 36px; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: var(--font-mono); font-weight: 600; font-size: 12px;
+    letter-spacing: var(--tracking-eyebrow); text-transform: uppercase;
+    color: var(--gold-500); margin-bottom: 22px;
+  }
+  .eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green-300); box-shadow: 0 0 10px var(--green-300); }
+  h1 {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: clamp(48px, 9vw, 88px); line-height: 0.96;
+    letter-spacing: var(--tracking-display); color: var(--paper-100);
+    margin-bottom: 22px;
+  }
+  .hero .sub { font-size: clamp(17px, 2.2vw, 20px); color: var(--green-200); max-width: 46ch; }
+  .trust-bar {
+    display: flex; align-items: center; gap: 22px; flex-wrap: wrap;
+    margin-top: 30px; padding: 16px 22px;
+    background: var(--green-850); border: 1.5px solid var(--border-dark);
+    border-radius: var(--radius-lg); box-shadow: var(--shadow-card-dark);
+  }
+  .trust-item { display: flex; align-items: center; gap: 9px; font-size: 15px; font-weight: 600; color: var(--paper-100); }
+  .trust-item svg { width: 19px; height: 19px; color: var(--gold-500); flex-shrink: 0; }
+  .trust-sep { width: 1.5px; height: 18px; background: var(--border-dark); }
+  @media (max-width: 540px) { .trust-sep { display: none; } }
+
+  /* ---------- Cards / steps ---------- */
+  .card {
+    background: var(--green-850); border: 1.5px solid var(--border-dark);
+    border-radius: var(--radius-xl); padding: 26px;
+    margin-top: 20px; box-shadow: var(--shadow-card-dark);
+  }
+  .step-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+  .step-head .step-q { line-height: 1.15; }
+  .step-num {
+    font-family: var(--font-mono); font-weight: 600; font-size: 12px;
+    letter-spacing: var(--tracking-eyebrow); text-transform: uppercase;
+    color: var(--gold-500); flex-shrink: 0;
+  }
+  .step-q { font-family: var(--font-display); font-weight: 700; font-size: 22px; letter-spacing: var(--tracking-tight); color: var(--paper-100); }
+  .step-q .opt { font-weight: 400; font-size: 15px; color: var(--green-200); font-family: var(--font-body); }
+
+  /* ---------- Fill options ---------- */
+  .fills { display: grid; gap: 11px; }
+  .fill {
+    display: flex; align-items: center; gap: 16px; width: 100%;
+    border: 1.5px solid var(--border-dark); border-radius: var(--radius-md);
+    background: var(--green-900); padding: 15px 18px; cursor: pointer; text-align: left;
+    transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+    font-family: inherit; color: var(--paper-100);
+  }
+  .fill:hover { border-color: var(--green-300); }
+  .fill:active { transform: scale(0.992); }
+  .fill.on { border-color: var(--gold-500); background: rgba(200,169,110,0.07); box-shadow: var(--inset-accent); }
+  .gauge { width: 32px; height: 42px; border: 2px solid var(--green-300); border-radius: var(--radius-xs); position: relative; flex: 0 0 auto; overflow: hidden; }
+  .gauge i { position: absolute; bottom: 0; left: 0; right: 0; background: var(--gold-500); display: block; transition: height var(--dur-base) var(--ease-out); }
+  .fill.on .gauge { border-color: var(--gold-500); }
+  .fill .body { flex: 1; }
+  .fill .label { font-weight: 700; font-size: 16px; display: block; }
+  .fill .ex { color: var(--green-200); font-size: 13px; display: block; font-weight: 400; margin-top: 1px; }
+  .fill .price { font-family: var(--font-mono); font-weight: 600; font-size: 15px; color: var(--gold-500); white-space: nowrap; }
+
+  /* ---------- Add-ons ---------- */
+  .addons { display: grid; gap: 9px; }
+  .addon {
+    display: flex; align-items: center; gap: 13px;
+    border: 1.5px solid var(--border-dark); border-radius: var(--radius-md);
+    padding: 13px 16px; cursor: pointer; font-size: 15px; color: var(--paper-100);
+    transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+  }
+  .addon:hover { border-color: var(--green-300); }
+  .addon.on { border-color: var(--gold-500); background: rgba(200,169,110,0.07); }
+  .checkbox {
+    width: 22px; height: 22px; border: 1.5px solid var(--green-300); border-radius: 5px;
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    transition: all var(--dur-fast) var(--ease-out);
+  }
+  .checkbox svg { width: 14px; height: 14px; color: var(--ink-900); opacity: 0; transition: opacity var(--dur-fast); }
+  .addon.on .checkbox { background: var(--gold-500); border-color: var(--gold-500); }
+  .addon.on .checkbox svg { opacity: 1; }
+  .addon .plus { margin-left: auto; font-family: var(--font-mono); font-weight: 600; color: var(--gold-500); }
+
+  /* ---------- Inputs ---------- */
+  .field { margin-bottom: 16px; }
+  .field:last-child { margin-bottom: 0; }
+  label.q { display: block; font-weight: 700; margin-bottom: 8px; font-size: 15px; color: var(--paper-100); }
+  input[type=text], input[type=tel], input[type=email], input[type=date] {
+    width: 100%; border: 1.5px solid var(--border-dark); border-radius: var(--radius-md);
+    padding: 14px 15px; font-size: 16px; font-family: inherit; background: var(--green-950); color: var(--paper-100);
+    transition: border-color var(--dur-fast) var(--ease-out);
+  }
+  input::placeholder { color: var(--steel-400); }
+  input:focus { outline: none; border-color: var(--gold-500); box-shadow: 0 0 0 3px rgba(200,169,110,0.18); }
+  input[type=date] { color-scheme: dark; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 480px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ---------- Time windows ---------- */
+  .windows { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .win {
+    border: 1.5px solid var(--border-dark); border-radius: var(--radius-md);
+    padding: 14px 8px; text-align: center; cursor: pointer;
+    font-weight: 700; font-size: 15px; background: var(--green-900); color: var(--paper-100);
+    transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+    font-family: inherit;
+  }
+  .win:hover { border-color: var(--green-300); }
+  .win .t { display: block; font-weight: 400; color: var(--green-200); font-size: 12px; font-family: var(--font-mono); margin-top: 3px; }
+  .win.on { border-color: var(--gold-500); background: rgba(200,169,110,0.07); box-shadow: var(--inset-accent); }
+
+  /* ---------- Summary / quote ---------- */
+  .quote {
+    background: var(--green-700); border: 1.5px solid var(--green-600);
+    border-radius: var(--radius-xl); padding: 28px; margin-top: 20px;
+    box-shadow: var(--shadow-card-dark);
+  }
+  .summary-col .quote { margin-top: clamp(48px, 8vw, 88px); }
+  @media (max-width: 939px) { .summary-col .quote { margin-top: 20px; } }
+  .quote .lead { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--green-200); }
+  .quote .amt { font-family: var(--font-mono); font-weight: 800; font-size: clamp(52px, 9vw, 68px); letter-spacing: -0.02em; color: var(--gold-500); margin: 6px 0; line-height: 1; }
+  .quote .amt small { font-size: 0.4em; opacity: 0.7; }
+  .quote.warn { background: var(--danger-600); border-color: var(--danger-500); }
+  .quote.warn .amt { font-size: clamp(26px, 5vw, 32px); color: var(--paper-100); }
+  .breakdown { margin: 18px 0 4px; border-top: 1.5px solid var(--border-dark); padding-top: 16px; }
+  .breakdown .ln { display: flex; justify-content: space-between; font-size: 14px; padding: 4px 0; color: var(--paper-100); }
+  .breakdown .ln .k { color: var(--green-200); }
+  .breakdown .ln .v { font-family: var(--font-mono); font-weight: 600; }
+  .quote .note { font-size: 13px; color: var(--green-200); margin-top: 12px; }
+
+  .book {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; margin-top: 18px; background: var(--gold-500); color: var(--ink-900);
+    border: none; border-radius: var(--radius-md); padding: 18px;
+    font-size: 18px; font-weight: 800; font-family: var(--font-display); letter-spacing: var(--tracking-tight);
+    cursor: pointer; box-shadow: var(--glow-gold);
+    transition: background var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-base) var(--ease-out);
+  }
+  .book:hover { background: var(--gold-400); }
+  .book:active { transform: scale(0.985); }
+  .book:disabled { background: var(--green-600); color: var(--green-200); cursor: not-allowed; box-shadow: none; }
+  .book svg { width: 20px; height: 20px; }
+  .fineprint { font-size: 13px; color: var(--green-200); text-align: center; margin-top: 14px; }
+  .err {
+    background: rgba(143,74,62,0.18); border: 1.5px solid var(--danger-500);
+    border-radius: var(--radius-md); padding: 12px 15px; color: #e8c4bc; font-size: 14px; margin-top: 14px;
+  }
+  .hidden { display: none !important; }
+
+  /* ---------- Confirmation ---------- */
+  .done { text-align: center; padding: 60px 20px; max-width: 540px; margin: 0 auto; }
+  .done .check { width: 76px; height: 76px; border-radius: 50%; background: var(--green-700); border: 2px solid var(--gold-500); display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; box-shadow: var(--glow-gold); }
+  .done .check svg { width: 38px; height: 38px; color: var(--gold-500); }
+  .done h2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(32px, 6vw, 42px); letter-spacing: var(--tracking-display); color: var(--paper-100); margin-bottom: 12px; }
+  .done .sub2 { color: var(--green-200); font-size: 17px; margin-bottom: 28px; }
+  .recap { background: var(--green-850); border: 1.5px solid var(--border-dark); border-radius: var(--radius-lg); padding: 22px; text-align: left; }
+  .recap .ln { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1.5px solid var(--border-dark); font-size: 15px; }
+  .recap .ln:last-child { border: none; }
+  .recap .k { color: var(--green-200); }
+  .recap .v { font-weight: 700; color: var(--paper-100); text-align: right; }
+
+  /* ---------- Footer ---------- */
+  .foot { border-top: 1.5px solid var(--border-dark); padding: 32px clamp(20px,5vw,48px); display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; max-width: 1100px; margin: 0 auto; }
+  .foot .tag { font-family: var(--font-mono); font-size: 12px; letter-spacing: var(--tracking-eyebrow); text-transform: uppercase; color: var(--gold-500); }
+  .foot .meta { font-size: 13px; color: var(--green-200); }
 </style>
 </head>
 <body>
-<div class="wrap" id="app">
-  <header>
-    <span class="badge">Same-day junk removal · Kansas City</span>
-    <h1>Price in 30 seconds.<br><span class="swing">We haul the rest.</span></h1>
-    <p class="sub">No callbacks. No quotes that take a week. Tell us what you've got and book right now.</p>
-    <div class="trust-bar">
-      <div class="trust-item">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#3a4a3f" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#3a4a3f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        KC locals
+  <div class="topbar">
+    <a href="#" class="brand" style="text-decoration:none">
+      <svg width="38" height="38" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="HaulKC mark">
+  <rect width="38" height="38" rx="22" fill="#1a3a2a"></rect>
+  <rect x="3" y="3" width="114" height="114" rx="19" fill="none" stroke="#c8a96e" stroke-opacity="0.35" stroke-width="2"></rect>
+  <path d="M34 38 L58 60 L34 82" stroke="#c8a96e" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+  <path d="M62 38 L86 60 L62 82" stroke="#f0ede6" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+</svg>
+      <span class="word">Haul<span class="kc">KC</span></span>
+    </a>
+    <a class="phone" href="tel:8163845010">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+      (816) 384-5010
+    </a>
+  </div>
+
+  <div id="app">
+    <div class="shell">
+      <div class="grid">
+        <!-- LEFT: hero + form -->
+        <div class="form-col">
+          <header class="hero">
+            <span class="eyebrow"><span class="dot"></span> Same-day junk removal · Kansas City</span>
+            <h1>Consider it<br>gone.</h1>
+            <p class="sub">Same-day junk removal in Kansas City — price in 30 seconds, pay when the job's done. No callbacks.</p>
+            <div class="trust-bar">
+              <div class="trust-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                KC locals
+              </div>
+              <span class="trust-sep"></span>
+              <div class="trust-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                Pay on-site
+              </div>
+              <span class="trust-sep"></span>
+              <div class="trust-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
+                Same-day available
+              </div>
+            </div>
+          </header>
+
+          <!-- Step 1: load -->
+          <div class="card">
+            <div class="step-head"><span class="step-num">Step 1</span><span class="step-q">How much junk are we talking?</span></div>
+            <div class="fills" id="fills">
+              <button class="fill" data-key="A few items" data-price="100"><span class="gauge"><i style="height:12%"></i></span><span class="body"><span class="label">Just a few items</span><span class="ex">A couch, a mattress, some boxes</span></span><span class="price">from $100</span></button>
+              <button class="fill" data-key="Quarter trailer" data-price="175"><span class="gauge"><i style="height:25%"></i></span><span class="body"><span class="label">Quarter trailer</span><span class="ex">A small room's worth</span></span><span class="price">from $175</span></button>
+              <button class="fill" data-key="Half trailer" data-price="275"><span class="gauge"><i style="height:50%"></i></span><span class="body"><span class="label">Half trailer</span><span class="ex">A garage or big closet cleanout</span></span><span class="price">from $275</span></button>
+              <button class="fill" data-key="Three-quarter trailer" data-price="375"><span class="gauge"><i style="height:75%"></i></span><span class="body"><span class="label">Three-quarter trailer</span><span class="ex">Most of a garage or basement</span></span><span class="price">from $375</span></button>
+              <button class="fill" data-key="Full trailer" data-price="450"><span class="gauge"><i style="height:100%"></i></span><span class="body"><span class="label">Full trailer</span><span class="ex">A whole garage, big move-out</span></span><span class="price">from $450</span></button>
+            </div>
+          </div>
+
+          <!-- Step 2: add-ons -->
+          <div class="card">
+            <div class="step-head"><span class="step-num">Step 2</span><span class="step-q">Anything extra? <span class="opt">(optional)</span></span></div>
+            <div class="addons" id="addons">
+              <label class="addon"><span class="checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><input type="checkbox" hidden data-price="40" data-label="Appliances"> Appliances (fridge, washer, stove) <span class="plus">+$40</span></label>
+              <label class="addon"><span class="checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><input type="checkbox" hidden data-price="50" data-label="Heavy items"> Heavy stuff (hot tub, concrete, dirt) <span class="plus">+$50</span></label>
+              <label class="addon"><span class="checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><input type="checkbox" hidden data-price="25" data-label="Stairs/long carry"> Stairs / long carry <span class="plus">+$25</span></label>
+              <label class="addon"><span class="checkbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span><input type="checkbox" hidden data-price="30" data-label="Tires/mattresses"> Tires or mattresses (special dump fee) <span class="plus">+$30</span></label>
+            </div>
+          </div>
+
+          <!-- Step 3: schedule -->
+          <div class="card">
+            <div class="step-head"><span class="step-num">Step 3</span><span class="step-q">When works for you?</span></div>
+            <div class="field">
+              <label class="q" for="date">Pickup day</label>
+              <input type="date" id="date">
+            </div>
+            <div class="field">
+              <label class="q">Time of day</label>
+              <div class="windows" id="windows">
+                <button class="win" data-key="Morning">Morning<span class="t">8am–12pm</span></button>
+                <button class="win" data-key="Afternoon">Afternoon<span class="t">12–5pm</span></button>
+                <button class="win" data-key="Evening">Evening<span class="t">5–8pm</span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4: contact -->
+          <div class="card">
+            <div class="step-head"><span class="step-num">Step 4</span><span class="step-q">Where and who?</span></div>
+            <div class="field">
+              <label class="q" for="address">Pickup address</label>
+              <input type="text" id="address" placeholder="Street address">
+            </div>
+            <div class="two-col field">
+              <div>
+                <label class="q" for="zip">ZIP code</label>
+                <input type="text" id="zip" inputmode="numeric" maxlength="5" placeholder="e.g. 64111">
+              </div>
+              <div>
+                <label class="q" for="name">Your name</label>
+                <input type="text" id="name" placeholder="First name">
+              </div>
+            </div>
+            <div class="two-col field">
+              <div>
+                <label class="q" for="phone">Phone</label>
+                <input type="tel" id="phone" placeholder="(816) 555-0123">
+              </div>
+              <div>
+                <label class="q" for="email">Email</label>
+                <input type="email" id="email" placeholder="you@email.com">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: sticky summary -->
+        <div class="summary-col">
+          <div class="quote" id="quoteBox">
+            <div class="lead">Your starting price</div>
+            <div class="amt" id="amt">$—</div>
+            <div class="breakdown hidden" id="breakdown"></div>
+            <p class="note" id="quoteNote">Pick how much junk to see your price. Final amount confirmed on-site.</p>
+            <div id="errBox" class="err hidden"></div>
+            <button class="book" id="bookBtn" disabled>
+              Pick how much junk first
+            </button>
+            <p class="fineprint">Book now, pay when the job's done. No deposit required.</p>
+          </div>
+        </div>
       </div>
-      <div class="trust-item">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#3a4a3f" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#3a4a3f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Pay on-site
-      </div>
-      <div class="trust-item">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#3a4a3f" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#3a4a3f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Same-day available
-      </div>
-      <a class="trust-phone" href="tel:8163845010">(816) 384-5010</a>
     </div>
-  </header>
-  <div class="card">
-    <div class="step-num">Step 1</div>
-    <div class="step-q">How much junk are we talking?</div>
-    <div class="fills" id="fills">
-      <button class="fill" data-key="A few items" data-price="100"><span class="gauge"><i style="height:12%"></i></span><span><span class="label">Just a few items</span><span class="ex">A couch, a mattress, some boxes</span></span><span class="price">from $100</span></button>
-      <button class="fill" data-key="Quarter trailer" data-price="175"><span class="gauge"><i style="height:25%"></i></span><span><span class="label">Quarter trailer</span><span class="ex">A small room's worth</span></span><span class="price">from $175</span></button>
-      <button class="fill" data-key="Half trailer" data-price="275"><span class="gauge"><i style="height:50%"></i></span><span><span class="label">Half trailer</span><span class="ex">A garage or big closet cleanout</span></span><span class="price">from $275</span></button>
-      <button class="fill" data-key="Three-quarter trailer" data-price="375"><span class="gauge"><i style="height:75%"></i></span><span><span class="label">Three-quarter trailer</span><span class="ex">Most of a garage or basement</span></span><span class="price">from $375</span></button>
-      <button class="fill" data-key="Full trailer" data-price="450"><span class="gauge"><i style="height:100%"></i></span><span><span class="label">Full trailer</span><span class="ex">A whole garage, big move-out</span></span><span class="price">from $450</span></button>
-    </div>
+
+    <footer class="foot">
+      <span class="tag">Consider it gone.</span>
+      <span class="meta">HaulKC · Kansas City, MO · <a href="tel:8163845010" style="color:var(--gold-500);text-decoration:none">(816) 384-5010</a></span>
+    </footer>
   </div>
-  <div class="card">
-    <div class="step-num">Step 2</div>
-    <div class="step-q">Anything extra? <span style="font-weight:400;color:var(--muted);font-size:15px">(optional)</span></div>
-    <div class="addons" id="addons">
-      <label class="addon"><input type="checkbox" data-price="40" data-label="Appliances"> Appliances (fridge, washer, stove) <span class="plus">+$40</span></label>
-      <label class="addon"><input type="checkbox" data-price="50" data-label="Heavy items"> Heavy stuff (hot tub, concrete, dirt) <span class="plus">+$50</span></label>
-      <label class="addon"><input type="checkbox" data-price="25" data-label="Stairs/long carry"> Stairs / long carry <span class="plus">+$25</span></label>
-      <label class="addon"><input type="checkbox" data-price="30" data-label="Tires/mattresses"> Tires or mattresses (special dump fee) <span class="plus">+$30</span></label>
-    </div>
-  </div>
-  <div class="card">
-    <div class="step-num">Step 3</div>
-    <div class="step-q">When works for you?</div>
-    <label class="q" for="date">Pickup day</label>
-    <input type="date" id="date" style="margin-bottom:16px">
-    <label class="q">Time of day</label>
-    <div class="windows" id="windows">
-      <button class="win" data-key="Morning">Morning<span class="t">8am–12pm</span></button>
-      <button class="win" data-key="Afternoon">Afternoon<span class="t">12–5pm</span></button>
-      <button class="win" data-key="Evening">Evening<span class="t">5–8pm</span></button>
-    </div>
-  </div>
-  <div class="card">
-    <div class="step-num">Step 4</div>
-    <div class="step-q">Where and who?</div>
-    <label class="q" for="address">Pickup address</label>
-    <input type="text" id="address" placeholder="Street address" style="margin-bottom:12px">
-    <label class="q" for="zip">ZIP code</label>
-    <input type="text" id="zip" inputmode="numeric" maxlength="5" placeholder="e.g. 64111" style="margin-bottom:16px">
-    <label class="q" for="name">Your name</label>
-    <input type="text" id="name" placeholder="First name" style="margin-bottom:12px">
-    <label class="q" for="phone">Phone</label>
-    <input type="tel" id="phone" placeholder="(816) 555-0123" style="margin-bottom:12px">
-    <label class="q" for="email">Email (confirmation sent here)</label>
-    <input type="email" id="email" placeholder="you@email.com">
-  </div>
-  <div id="quoteBox" class="quote hidden">
-    <div class="lead">Your starting price</div>
-    <div class="amt" id="amt">$0</div>
-    <p class="note" id="quoteNote">Final price confirmed on-site once the crew sees the load.</p>
-  </div>
-  <div id="errBox" class="err hidden"></div>
-  <button class="book" id="bookBtn" disabled>Pick how much junk first</button>
-  <p class="fineprint">Book now, pay when the job's done. No deposit required.</p>
-</div>
+
 <script>
-  // ─── CONFIG ───────────────────────────────────────────────
   const SUPABASE_URL = "https://okogabnckgvxlruhmniu.supabase.co";
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rb2dhYm5ja2d2eGxydWhtbml1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNDk2NzMsImV4cCI6MjA5NjYyNTY3M30.peGdhDaxF2UaMeqC7HcAEMmry6Z4DRmIyaiAhM0KHpA";
-  // ─── SERVICE AREA zips ────────────────────────────────────
-  const SERVICE_ZIPS = [
-    "64101","64102","64105","64106","64108","64109","64110","64111","64112",
-    "64113","64114","64116","64117","64118","64119","64120","64123","64124",
-    "64125","64126","64127","64128","64129","64130","64131","64132","64133",
-    "64134","64136","64137","64138","64139","64145","64146","64147","64149",
-    "64150","64151","64152","64153","64154","64155","64156","64157","64158",
-    "64161","64163","64164","64165","64166","64167","64168","64170",
-    "66101","66102","66103","66104","66105","66106","66109","66111","66112",
-    "66202","66203","66204","66205","66206","66207","66208","66209","66210",
-    "66211","66212","66213","66214","66215","66216","66217","66218","66219",
-    "66220","66221","66223","66224","66226","66227"
-  ];
+  const SERVICE_ZIPS = ["64101","64102","64105","64106","64108","64109","64110","64111","64112","64113","64114","64116","64117","64118","64119","64120","64123","64124","64125","64126","64127","64128","64129","64130","64131","64132","64133","64134","64136","64137","64138","64139","64145","64146","64147","64149","64150","64151","64152","64153","64154","64155","64156","64157","64158","64161","64163","64164","64165","64166","64167","64168","64170","66101","66102","66103","66104","66105","66106","66109","66111","66112","66202","66203","66204","66205","66206","66207","66208","66209","66210","66211","66212","66213","66214","66215","66216","66217","66218","66219","66220","66221","66223","66224","66226","66227"];
   const state = { fillKey:"", fillPrice:0, addonTotal:0, addons:[], window:"" };
   const $ = id => document.getElementById(id);
   const fills=$("fills"), addonsEl=$("addons"), windows=$("windows"),
-        quoteBox=$("quoteBox"), amt=$("amt"), quoteNote=$("quoteNote"),
+        quoteBox=$("quoteBox"), amt=$("amt"), quoteNote=$("quoteNote"), breakdown=$("breakdown"),
         bookBtn=$("bookBtn"), zipEl=$("zip"), dateEl=$("date"), errBox=$("errBox");
   dateEl.min = new Date().toISOString().split("T")[0];
+
   fills.addEventListener("click", e => {
     const b = e.target.closest(".fill"); if(!b) return;
     [...fills.children].forEach(x=>x.classList.remove("on"));
@@ -179,7 +630,7 @@
     state.addonTotal=0; state.addons=[];
     addonsEl.querySelectorAll("input").forEach(cb=>{
       cb.closest(".addon").classList.toggle("on",cb.checked);
-      if(cb.checked){ state.addonTotal+=+cb.dataset.price; state.addons.push(cb.dataset.label); }
+      if(cb.checked){ state.addonTotal+=+cb.dataset.price; state.addons.push({label:cb.dataset.label, price:+cb.dataset.price}); }
     });
     update();
   });
@@ -189,31 +640,39 @@
     b.classList.add("on"); state.window=b.dataset.key; update();
   });
   zipEl.addEventListener("input", update);
+
   function total(){ return state.fillPrice + state.addonTotal; }
+
   function update(){
     errBox.classList.add("hidden");
+    quoteBox.classList.remove("warn");
     if(!state.fillPrice){
-      quoteBox.classList.add("hidden");
+      amt.textContent="$—"; breakdown.classList.add("hidden");
+      quoteNote.textContent="Pick how much junk to see your price. Final amount confirmed on-site.";
       bookBtn.disabled=true; bookBtn.textContent="Pick how much junk first"; return;
     }
     const z=zipEl.value.trim();
     if(z.length===5 && !SERVICE_ZIPS.includes(z)){
-      quoteBox.classList.remove("hidden"); quoteBox.classList.add("warn");
-      amt.textContent="Just outside our area";
-      quoteNote.textContent="That ZIP is past our normal range — text us and we'll see if we can make it work.";
+      quoteBox.classList.add("warn");
+      amt.textContent="Just outside our area"; breakdown.classList.add("hidden");
+      quoteNote.textContent="That ZIP is past our normal range — call or text us and we'll see if we can make it work.";
       bookBtn.disabled=true; bookBtn.textContent="Outside service area"; return;
     }
-    quoteBox.classList.remove("hidden"); quoteBox.classList.remove("warn");
-    amt.innerHTML="$"+total()+" <small>+</small>";
+    // breakdown
+    let rows = `<div class="ln"><span class="k">${state.fillKey}</span><span class="v">$${state.fillPrice}</span></div>`;
+    state.addons.forEach(a=> rows += `<div class="ln"><span class="k">${a.label}</span><span class="v">+$${a.price}</span></div>`);
+    breakdown.innerHTML = rows; breakdown.classList.remove("hidden");
+    amt.innerHTML="$"+total()+"<small>+</small>";
     quoteNote.textContent="Starting price. Final amount confirmed on-site once the crew sees the load.";
-    bookBtn.disabled=false; bookBtn.textContent="Book this pickup →";
+    bookBtn.disabled=false;
+    bookBtn.innerHTML='Book this pickup <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>';
   }
-  bookBtn.addEventListener("click", submitBooking);
-  async function submitBooking(){
+
+  bookBtn.addEventListener("click", async () => {
     if(bookBtn.disabled) return;
     const booking = {
       load: state.fillKey,
-      addons: state.addons.join(", ") || "none",
+      addons: state.addons.map(a=>a.label).join(", ") || "none",
       starting_price: total(),
       pickup_date: dateEl.value || "",
       time_window: state.window || "",
@@ -233,53 +692,42 @@
     if(missing.length){
       errBox.textContent = "Just need a bit more: " + missing.join(", ");
       errBox.classList.remove("hidden");
-      errBox.scrollIntoView({behavior:"smooth", block:"center"});
       return;
     }
     bookBtn.disabled=true; bookBtn.textContent="Booking…";
-    // 1. Save to Supabase
-    let saved = false;
+    let saved=false;
     try {
       const r = await fetch(SUPABASE_URL+"/rest/v1/bookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": SUPABASE_KEY,
-          "Authorization": "Bearer "+SUPABASE_KEY,
-          "Prefer": "return=minimal"
-        },
+        method:"POST",
+        headers:{ "Content-Type":"application/json","apikey":SUPABASE_KEY,"Authorization":"Bearer "+SUPABASE_KEY,"Prefer":"return=minimal" },
         body: JSON.stringify(booking)
       });
       saved = r.ok;
-      if(!r.ok){ const t=await r.text(); console.error("Supabase error:", t); }
+      if(!r.ok){ console.error("Supabase error:", await r.text()); }
     } catch(e){ console.error("Supabase fetch failed:", e); }
-    // 2. Notify crew
     try {
-      await fetch('/api/notify-crew', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(booking)
-      });
+      await fetch('/api/notify-crew', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(booking) });
     } catch(e){ console.error("Notify failed:", e); }
     showConfirmation(booking, saved);
-  }
+  });
+
   function showConfirmation(b, saved){
     $("app").innerHTML = `
       <div class="done">
-        <div class="check">✓</div>
-        <h2>You're booked${b.name ? ", "+b.name : ""}!</h2>
-        <p class="sub" style="margin:0 auto 0">The crew will reach out to confirm. Pay on the day of the job.</p>
+        <div class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <h2>You're booked${b.name ? ", "+b.name : ""}.</h2>
+        <p class="sub2">The crew will reach out to confirm. Pay on the day of the job — no deposit.</p>
         <div class="recap">
-          <div><span class="k">Load</span><span class="v">${b.load}</span></div>
-          ${b.addons!=="none"?`<div><span class="k">Extras</span><span class="v">${b.addons}</span></div>`:""}
-          <div><span class="k">Starting price</span><span class="v">$${b.starting_price}+</span></div>
-          <div><span class="k">Date</span><span class="v">${b.pickup_date}</span></div>
-          <div><span class="k">Time</span><span class="v">${b.time_window}</span></div>
-          <div><span class="k">Address</span><span class="v">${b.address}</span></div>
-          <div><span class="k">Phone</span><span class="v">${b.phone}</span></div>
+          <div class="ln"><span class="k">Load</span><span class="v">${b.load}</span></div>
+          ${b.addons!=="none"?`<div class="ln"><span class="k">Extras</span><span class="v">${b.addons}</span></div>`:""}
+          <div class="ln"><span class="k">Starting price</span><span class="v">$${b.starting_price}+</span></div>
+          <div class="ln"><span class="k">Date</span><span class="v">${b.pickup_date}</span></div>
+          <div class="ln"><span class="k">Time</span><span class="v">${b.time_window}</span></div>
+          <div class="ln"><span class="k">Address</span><span class="v">${b.address}, ${b.zip}</span></div>
+          <div class="ln"><span class="k">Phone</span><span class="v">${b.phone}</span></div>
         </div>
-        <p class="fineprint">${saved ? "✓ Booking saved. See you soon." : "⚠ Booking saved locally — check Supabase keys if this persists."}</p>
-        <p class="fineprint" style="margin-top:8px">Questions? Call or text <a href="tel:8163845010" style="color:var(--hi-dark);font-weight:700">(816) 384-5010</a></p>
+        <p class="fineprint" style="margin-top:20px">${saved ? "✓ Booking saved — the crew has been emailed." : "We got your request — if you do not hear back soon, text us."}</p>
+        <p class="fineprint" style="margin-top:8px">Questions? Call or text <a href="tel:8163845010" style="color:var(--gold-500);font-weight:700;text-decoration:none">(816) 384-5010</a></p>
       </div>`;
     window.scrollTo(0,0);
   }
