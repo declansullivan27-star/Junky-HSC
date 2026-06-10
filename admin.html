@@ -81,37 +81,51 @@
 </div>
 
 <script>
-  const SUPABASE_URL = "https://okogabnckgvxlruhmniu.supabase.co";
-  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rb2dhYm5ja2d2eGxydWhtbml1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNDk2NzMsImV4cCI6MjA5NjYyNTY3M30.peGdhDaxF2UaMeqC7HcAEMmry6Z4DRmIyaiAhM0KHpA";
+  // No secrets here. Auth + data go through the server endpoint /api/admin-bookings,
+  // which checks the password and uses the secret service-role key server-side.
+  let allJobs = [], currentFilter = "all", sessionPw = "";
 
-  // ─── SET YOUR ADMIN PASSWORD HERE ─────────────────────────
-  const ADMIN_PASSWORD = "HaulKC-P7rgUpjm";  // changed from default
+  async function api(action, extra){
+    return fetch('/api/admin-bookings', {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify({ password: sessionPw, action, ...(extra||{}) })
+    });
+  }
 
-  let allJobs = [], currentFilter = "all";
-
-  function tryLogin(){
+  async function tryLogin(){
     const pw = document.getElementById("pwInput").value;
-    if(pw === ADMIN_PASSWORD){
+    document.getElementById("loginErr").textContent = "";
+    sessionPw = pw;
+    try {
+      const r = await api("list");
+      if(r.status === 401){ throw new Error("bad password"); }
+      if(!r.ok){ throw new Error("server error"); }
+      allJobs = await r.json();
       document.getElementById("loginScreen").style.display = "none";
       document.getElementById("dashboard").style.display = "block";
-      loadJobs();
-    } else {
-      document.getElementById("loginErr").textContent = "Wrong password";
+      renderStats();
+      renderJobs();
+      document.getElementById("lastRefresh").textContent = "Last updated: "+new Date().toLocaleTimeString();
+    } catch(e){
+      sessionPw = "";
+      document.getElementById("loginErr").textContent =
+        e.message === "bad password" ? "Wrong password" : "Couldn't reach the server — try again.";
     }
   }
 
   function logout(){
+    sessionPw = "";
     document.getElementById("loginScreen").style.display = "block";
     document.getElementById("dashboard").style.display = "none";
     document.getElementById("pwInput").value = "";
   }
 
   async function loadJobs(){
-    document.getElementById("jobList").innerHTML = '<div class="loading">Loading jobs…</div>';
+    if(!sessionPw) return;
     try {
-      const r = await fetch(SUPABASE_URL+"/rest/v1/bookings?order=id.desc", {
-        headers:{ "apikey": SUPABASE_KEY, "Authorization": "Bearer "+SUPABASE_KEY }
-      });
+      const r = await api("list");
+      if(!r.ok) throw new Error("load failed");
       allJobs = await r.json();
       renderStats();
       renderJobs();
@@ -169,11 +183,10 @@
   }
 
   async function markDone(id){
-    await fetch(SUPABASE_URL+"/rest/v1/bookings?id=eq."+id, {
-      method:"PATCH",
-      headers:{ "Content-Type":"application/json", "apikey":SUPABASE_KEY, "Authorization":"Bearer "+SUPABASE_KEY },
-      body: JSON.stringify({ status:"done" })
-    });
+    try {
+      const r = await api("markDone", { id });
+      if(!r.ok) throw new Error("update failed");
+    } catch(e){ return; }
     allJobs = allJobs.map(j=>j.id===id?{...j,status:"done"}:j);
     renderStats(); renderJobs();
   }
