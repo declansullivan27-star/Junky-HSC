@@ -3,86 +3,531 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Junky HSC — Admin</title>
+<title>HaulKC — Crew Admin</title>
 <style>
-  :root { --ink:#1a1f1c; --paper:#f3f0e9; --steel:#3a4a3f; --hi:#d6552b; --hi-dark:#b8431f; --line:#d4cfc2; --muted:#6b6f68; --good:#2f6f4f; }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:'Helvetica Neue',Arial,sans-serif; background:var(--paper); color:var(--ink); -webkit-font-smoothing:antialiased; }
-  .wrap { max-width:900px; margin:0 auto; padding:24px 20px 64px; }
-  h1 { font-size:28px; font-weight:800; margin-bottom:4px; }
-  .sub { color:var(--muted); font-size:14px; margin-bottom:24px; }
-  /* login */
-  .login { max-width:340px; margin:80px auto; background:#fff; border:1.5px solid var(--line); border-radius:10px; padding:28px; }
-  .login h2 { font-size:20px; font-weight:800; margin-bottom:16px; }
-  .login input { width:100%; border:1.5px solid var(--line); border-radius:8px; padding:12px 14px; font-size:16px; font-family:inherit; margin-bottom:12px; }
-  .login input:focus { outline:none; border-color:var(--hi); }
-  .login button { width:100%; background:var(--hi); color:#fff; border:none; border-radius:8px; padding:14px; font-size:16px; font-weight:800; cursor:pointer; font-family:inherit; }
-  .login .err { color:var(--hi-dark); font-size:13px; margin-top:8px; }
-  /* stats bar */
-  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; margin-bottom:24px; }
-  .stat { background:#fff; border:1.5px solid var(--line); border-radius:10px; padding:16px; }
-  .stat .n { font-size:28px; font-weight:800; }
-  .stat .l { font-size:13px; color:var(--muted); }
-  /* jobs */
-  .job { background:#fff; border:1.5px solid var(--line); border-radius:10px; padding:18px; margin-bottom:12px; }
-  .job-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-  .job-name { font-size:18px; font-weight:800; }
-  .job-price { font-size:18px; font-weight:800; color:var(--hi); white-space:nowrap; }
-  .job-meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
-  .tag { background:var(--paper); border-radius:4px; padding:3px 8px; font-size:13px; color:var(--steel); }
-  .tag.new { background:#fdf3ee; color:var(--hi-dark); font-weight:700; }
-  .tag.done { background:#e8f4ee; color:var(--good); font-weight:700; }
-  .job-actions { display:flex; gap:8px; margin-top:12px; }
-  .btn { border:none; border-radius:6px; padding:8px 14px; font-size:13px; font-weight:700; cursor:pointer; font-family:inherit; }
-  .btn-done { background:var(--good); color:#fff; }
-  .btn-call { background:var(--steel); color:#fff; }
-  .empty { text-align:center; padding:60px 20px; color:var(--muted); }
-  .loading { text-align:center; padding:60px 20px; color:var(--muted); font-size:18px; }
-  .top-bar { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
-  .logout { font-size:13px; color:var(--muted); cursor:pointer; text-decoration:underline; }
-  .filter { display:flex; gap:8px; margin-bottom:16px; }
-  .filter button { border:1.5px solid var(--line); border-radius:6px; padding:6px 14px; font-size:13px; font-weight:700; cursor:pointer; background:#fff; font-family:inherit; }
-  .filter button.on { border-color:var(--hi); background:#fdf3ee; color:var(--hi-dark); }
+/* ============================================================
+   HaulKC — Webfonts
+   SUBSTITUTION NOTE: the source site shipped system Helvetica
+   Neue/Arial. For a bolder industrial voice we standardize on
+   Archivo (display + body) and Spline Sans Mono (data/labels),
+   served from Google Fonts. Swap in licensed binaries if desired.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Spline+Sans+Mono:wght@400;500;600&display=swap');
+
+/* ============================================================
+   HaulKC — Color tokens
+   Dark, industrial, trustworthy. Forest green + muted gold on
+   warm off-white. No bright colors. No orange.
+   ============================================================ */
+
+:root {
+  /* ---- Forest green scale (the spine of the brand) ---- */
+  --green-950: #0c1b13;  /* near-black green — deepest backdrops */
+  --green-900: #102619;  /* hero/footer backdrop */
+  --green-850: #142f20;  /* raised dark surface */
+  --green-800: #16341f;
+  --green-700: #1a3a2a;  /* PRIMARY brand green */
+  --green-600: #224b34;  /* hover/lift of primary */
+  --green-500: #2c5e41;
+  --green-400: #3f7a57;  /* muted mid green */
+  --green-300: #5e9a76;  /* success/positive */
+  --green-200: #8fbca2;  /* tint on dark */
+  --green-100: #c2dccd;  /* faint tint */
+
+  /* ---- Warm off-white / paper (text + light surfaces) ---- */
+  --paper-50:  #faf8f3;  /* lightest card surface */
+  --paper-100: #f0ede6;  /* PRIMARY paper / page bg */
+  --paper-200: #e7e3d8;  /* sunk surface on light */
+  --paper-300: #d8d3c4;  /* hairlines on light */
+  --paper-400: #c4beac;  /* disabled / faint */
+
+  /* ---- Muted gold (accent — sparing) ---- */
+  --gold-700: #8a6f3f;  /* deep gold, text on light */
+  --gold-600: #a98b54;  /* gold dim */
+  --gold-500: #c8a96e;  /* PRIMARY gold accent */
+  --gold-400: #d8bc83;  /* bright gold — glow / hover */
+  --gold-300: #e6d2a6;  /* gold tint */
+
+  /* ---- Warm neutrals (text + structure) ---- */
+  --ink-900: #111c15;  /* darkest text on light */
+  --ink-700: #2a352d;  /* body text on light */
+  --steel-600: #4a5650; /* secondary text on light */
+  --steel-500: #6b756d; /* muted text / captions */
+  --steel-400: #8a938b; /* faint text */
+
+  /* ---- Semantic raw (muted, never neon) ---- */
+  --success-500: #3f7a57; /* uses the green family */
+  --danger-600:  #8f4a3e; /* muted brick — NOT orange */
+  --danger-500:  #a55a4c;
+  --danger-tint: #f1e3df;
+  --warning-500: #a98b54; /* leans into gold */
+
+  /* ============================================================
+     SEMANTIC ALIASES  — reference these in components
+     ============================================================ */
+
+  /* Surfaces — dark mode (hero/app/footer) */
+  --surface-base:     var(--green-900);   /* page backdrop, dark */
+  --surface-raised:   var(--green-850);   /* card on dark */
+  --surface-sunk:     var(--green-950);   /* well / input on dark */
+  --surface-primary:  var(--green-700);   /* brand-green panels */
+
+  /* Surfaces — light mode (forms/docs/admin) */
+  --surface-paper:    var(--paper-100);   /* light page backdrop */
+  --surface-card:     var(--paper-50);    /* card on light */
+  --surface-card-sunk:var(--paper-200);   /* sunk panel on light */
+
+  /* Text */
+  --text-strong:    var(--ink-900);   /* headings on light */
+  --text-body:      var(--ink-700);   /* body on light */
+  --text-muted:     var(--steel-500); /* captions on light */
+  --text-on-dark:   var(--paper-100); /* body on dark green */
+  --text-on-dark-muted: var(--green-200); /* muted on dark */
+  --text-accent:    var(--gold-700);  /* gold text on light */
+  --text-accent-on-dark: var(--gold-500); /* gold text on dark */
+
+  /* Borders / lines */
+  --border-light:   var(--paper-300); /* hairline on light */
+  --border-strong:  var(--ink-700);
+  --border-dark:    rgba(240,237,230,0.12); /* hairline on dark */
+  --border-gold:    var(--gold-500);
+
+  /* Interactive — buttons */
+  --action-primary:        var(--green-700);
+  --action-primary-hover:  var(--green-600);
+  --action-primary-press:  var(--green-800);
+  --action-accent:         var(--gold-500);
+  --action-accent-hover:   var(--gold-400);
+  --action-disabled:       var(--paper-400);
+
+  /* Focus / glow */
+  --focus-ring:   var(--gold-500);
+  --glow-green:   0 0 0 1px rgba(200,169,110,0.0), 0 8px 24px -8px rgba(12,27,19,0.55);
+  --glow-gold:    0 0 24px -6px rgba(200,169,110,0.45);
+
+  /* Feedback */
+  --fb-success:   var(--success-500);
+  --fb-danger:    var(--danger-600);
+  --fb-warning:   var(--warning-500);
+}
+
+/* ============================================================
+   HaulKC — Typography tokens
+   Archivo for everything (clean, bold, industrial grotesque).
+   Spline Sans Mono for prices, ZIPs, eyebrows and crew data.
+   ============================================================ */
+
+:root {
+  /* ---- Families ---- */
+  --font-display: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --font-body:    'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono:    'Spline Sans Mono', 'SF Mono', ui-monospace, monospace;
+
+  /* ---- Weights ---- */
+  --fw-regular:  400;  /* @kind font */
+  --fw-medium:   500;  /* @kind font */
+  --fw-semibold: 600;  /* @kind font */
+  --fw-bold:     700;  /* @kind font */
+  --fw-extrabold:800;  /* @kind font */
+  --fw-black:    900;  /* @kind font */
+
+  /* ---- Display / headline scale (tight, heavy) ---- */
+  --text-display: 800 clamp(40px, 7vw, 72px)/0.98 var(--font-display);
+  --text-h1:      800 clamp(30px, 5vw, 46px)/1.02 var(--font-display);
+  --text-h2:      700 clamp(24px, 3.4vw, 32px)/1.08 var(--font-display);
+  --text-h3:      700 20px/1.2 var(--font-display);
+  --text-h4:      700 17px/1.25 var(--font-display);
+
+  /* ---- Body scale ---- */
+  --text-lead:    400 19px/1.5 var(--font-body);
+  --text-base:    400 16px/1.55 var(--font-body);
+  --text-sm:      400 14px/1.5 var(--font-body);
+  --text-xs:      500 13px/1.45 var(--font-body);
+
+  /* ---- Eyebrow / label (uppercase, tracked, mono) ---- */
+  --text-eyebrow: 600 12px/1.3 var(--font-mono);
+  --text-data:    500 15px/1.4 var(--font-mono);   /* prices, ZIPs */
+  --text-data-lg: 800 clamp(40px,8vw,56px)/1 var(--font-mono); /* big quote number */
+
+  /* ---- Letter-spacing ---- */
+  --tracking-display: -0.02em;
+  --tracking-tight:   -0.01em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.08em;
+  --tracking-eyebrow: 0.14em;   /* uppercase eyebrows */
+}
+
+/* ============================================================
+   HaulKC — Spacing & layout tokens
+   8px base rhythm. Tight, utilitarian.
+   ============================================================ */
+
+:root {
+  /* ---- Spacing scale (8px base) ---- */
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* ---- Container widths ---- */
+  --container-form:  560px;   /* booking flow column */
+  --container-admin: 900px;   /* admin dashboard */
+  --container-page:  1120px;  /* marketing width */
+  --gutter:          20px;    /* page side padding (mobile) */
+  --gutter-lg:       32px;
+
+  /* ---- Component sizing ---- */
+  --control-h:    52px;   /* inputs, big buttons */
+  --control-h-sm: 40px;
+  --tap-min:      44px;   /* minimum hit target */
+}
+
+/* ============================================================
+   HaulKC — Effects: radii, borders, shadows, motion
+   Restrained. Crisp 1.5px lines. Subtle green glow on dark.
+   ============================================================ */
+
+:root {
+  /* ---- Corner radii (modest, industrial) ---- */
+  --radius-xs:  3px;   /* tags, badges */
+  --radius-sm:  6px;   /* buttons, chips */
+  --radius-md:  8px;   /* inputs */
+  --radius-lg:  10px;  /* cards */
+  --radius-xl:  14px;  /* hero panels */
+  --radius-pill: 999px;
+
+  /* ---- Border widths ---- */
+  --border-hair: 1px;
+  --border-mid:  1.5px;   /* the brand's signature crisp line */
+  --border-thick:2px;
+
+  /* ---- Shadows (cool, low, never fluffy) ---- */
+  --shadow-xs:  0 1px 2px rgba(12,27,19,0.06);
+  --shadow-sm:  0 2px 6px rgba(12,27,19,0.08);
+  --shadow-md:  0 6px 18px -6px rgba(12,27,19,0.18);
+  --shadow-lg:  0 18px 40px -16px rgba(12,27,19,0.32);
+  --shadow-card-dark: 0 12px 32px -12px rgba(0,0,0,0.55);
+
+  /* Inset focus highlight used on selected fills */
+  --inset-accent: inset 0 0 0 1.5px var(--gold-500);
+  --inset-green:  inset 0 0 0 1.5px var(--green-700);
+
+  /* Subtle green-button glow */
+  --glow-btn: 0 6px 18px -8px rgba(26,58,42,0.6), 0 0 0 1px rgba(200,169,110,0.10);
+  --glow-btn-hover: 0 8px 22px -8px rgba(26,58,42,0.7), 0 0 18px -4px rgba(200,169,110,0.28);
+
+  /* ---- Motion ---- */
+  --ease-out:  cubic-bezier(0.22, 0.61, 0.36, 1);  /* @kind other */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* @kind other */
+  --dur-fast:  120ms;  /* @kind other */
+  --dur-base:  180ms;  /* @kind other */
+  --dur-slow:  280ms;  /* @kind other */
+
+  /* press feedback */
+  --press-scale: 0.98;  /* @kind other */
+}
+
+/* ============================================================
+   HaulKC — Base element defaults (optional, opt-in helpers)
+   Kept minimal so consumers can layer freely.
+   ============================================================ */
+
+.hkc-root {
+  font: var(--text-base);
+  color: var(--text-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Utility: uppercase tracked eyebrow */
+.hkc-eyebrow {
+  font: var(--text-eyebrow);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--text-accent);
+}
+
+/* Selection uses gold tint */
+::selection { background: var(--gold-300); color: var(--ink-900); }
+
+</style>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: var(--font-body);
+    background: var(--paper-100);
+    color: var(--text-body);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+
+  /* ---- Topbar (dark, matching booking) ---- */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px clamp(20px, 5vw, 40px);
+    background: var(--green-900);
+    border-bottom: 1.5px solid var(--border-dark);
+  }
+  .brand { display: flex; align-items: center; gap: 11px; text-decoration: none; }
+  .brand img { width: 34px; height: 34px; }
+  .brand .word { font-family: var(--font-display); font-weight: 800; font-size: 20px;
+    letter-spacing: -0.02em; color: var(--paper-100); line-height: 1; }
+  .brand .word .kc { color: var(--gold-500); }
+  .brand .pill {
+    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+    letter-spacing: var(--tracking-eyebrow); text-transform: uppercase;
+    color: var(--green-200); background: rgba(255,255,255,0.06);
+    border: 1.5px solid var(--border-dark); border-radius: var(--radius-xs);
+    padding: 3px 8px; line-height: 1;
+  }
+  .logout-btn {
+    font-family: var(--font-mono); font-size: 13px; font-weight: 600; letter-spacing: 0.03em;
+    color: var(--green-200); background: none; border: none; cursor: pointer;
+    padding: 6px 0; text-decoration: underline; text-underline-offset: 3px;
+    transition: color var(--dur-fast) var(--ease-out);
+  }
+  .logout-btn:hover { color: var(--paper-100); }
+
+  /* ---- Page shell ---- */
+  .shell { max-width: 900px; margin: 0 auto; padding: 32px clamp(20px, 5vw, 40px) 80px; }
+
+  /* ---- Page title ---- */
+  .page-head { margin-bottom: 28px; }
+  .page-head h1 {
+    font-family: var(--font-display); font-weight: 800; font-size: 28px;
+    letter-spacing: var(--tracking-tight); color: var(--text-strong); margin-bottom: 4px;
+  }
+  .page-head .sub {
+    font-family: var(--font-mono); font-size: 13px; color: var(--text-muted);
+  }
+  .page-head .sub .dot {
+    display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green-300); box-shadow: 0 0 8px var(--green-300);
+    margin-right: 7px; vertical-align: middle;
+  }
+
+  /* ---- Stats bar ---- */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 28px; }
+  .stat {
+    background: var(--surface-card); border: 1.5px solid var(--border-light);
+    border-radius: var(--radius-lg); padding: 18px; box-shadow: var(--shadow-xs);
+  }
+  .stat .n {
+    font-family: var(--font-mono); font-weight: 800; font-size: 32px;
+    letter-spacing: -0.02em; color: var(--text-strong); line-height: 1; margin-bottom: 6px;
+  }
+  .stat .n.alert { color: var(--danger-600); }
+  .stat .n.revenue { color: var(--gold-700); }
+  .stat .l { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+
+  /* ---- Filter tabs ---- */
+  .filter { display: flex; gap: 8px; margin-bottom: 20px; }
+  .filter-btn {
+    font-family: var(--font-display); font-weight: 700; font-size: 14px;
+    padding: 7px 16px; border: 1.5px solid var(--border-light); border-radius: var(--radius-sm);
+    background: var(--surface-card); color: var(--text-muted); cursor: pointer;
+    transition: border-color var(--dur-fast) var(--ease-out),
+                background var(--dur-fast) var(--ease-out),
+                color var(--dur-fast) var(--ease-out);
+  }
+  .filter-btn:hover { border-color: var(--green-400); color: var(--text-strong); }
+  .filter-btn.on {
+    border-color: var(--gold-500); background: rgba(200,169,110,0.08);
+    color: var(--gold-700); box-shadow: var(--inset-accent);
+  }
+
+  /* ---- Job cards ---- */
+  .job {
+    background: var(--surface-card); border: 1.5px solid var(--border-light);
+    border-radius: var(--radius-lg); padding: 20px;
+    margin-bottom: 12px; box-shadow: var(--shadow-xs);
+    transition: box-shadow var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+  }
+  .job:hover { box-shadow: var(--shadow-sm); border-color: var(--paper-400); }
+  .job-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .job-name {
+    font-family: var(--font-display); font-weight: 800; font-size: 19px;
+    letter-spacing: var(--tracking-tight); color: var(--text-strong);
+  }
+  .job-price {
+    font-family: var(--font-mono); font-weight: 800; font-size: 19px;
+    color: var(--gold-700); white-space: nowrap; letter-spacing: -0.01em;
+  }
+  .job-meta {
+    display: flex; flex-wrap: wrap; gap: 7px; margin-top: 11px;
+  }
+  .meta-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--paper-200); border-radius: var(--radius-xs);
+    padding: 4px 9px; font-size: 13px; color: var(--steel-600); font-weight: 500;
+  }
+  .meta-tag svg { flex-shrink: 0; }
+  .status-badge {
+    display: inline-flex; align-items: center;
+    font-family: var(--font-mono); font-weight: 700; font-size: 11px;
+    letter-spacing: var(--tracking-eyebrow); text-transform: uppercase;
+    padding: 4px 9px; border-radius: var(--radius-xs); line-height: 1;
+  }
+  .status-badge.new { background: rgba(63,122,87,0.12); color: var(--green-500); border: 1.5px solid rgba(63,122,87,0.3); }
+  .status-badge.done { background: var(--paper-200); color: var(--steel-500); border: 1.5px solid var(--border-light); }
+  .job-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: var(--font-display); font-weight: 700; font-size: 13px;
+    padding: 8px 15px; border-radius: var(--radius-sm); cursor: pointer;
+    border: 1.5px solid transparent; white-space: nowrap;
+    transition: background var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+  }
+  .btn svg { flex-shrink: 0; }
+  .btn-call {
+    background: var(--green-700); color: var(--paper-100);
+    box-shadow: var(--glow-btn);
+  }
+  .btn-call:hover { background: var(--green-600); box-shadow: var(--glow-btn-hover); }
+  .btn-done {
+    background: var(--paper-100); color: var(--steel-600);
+    border-color: var(--border-light);
+  }
+  .btn-done:hover { background: var(--paper-200); border-color: var(--steel-600); }
+
+  /* ---- Empty / loading states ---- */
+  .empty {
+    text-align: center; padding: 60px 20px;
+    color: var(--text-muted); font-size: 15px;
+  }
+  .empty span { display: block; font-size: 32px; margin-bottom: 12px; opacity: 0.4; }
+
+  /* ---- Login screen ---- */
+  #loginScreen {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background: var(--paper-100); padding: 24px;
+  }
+  .login-card {
+    width: 100%; max-width: 360px;
+    background: var(--surface-card); border: 1.5px solid var(--border-light);
+    border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--shadow-md);
+  }
+  .login-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+  .login-logo img { width: 36px; height: 36px; }
+  .login-logo .word { font-family: var(--font-display); font-weight: 800; font-size: 20px; letter-spacing: -0.02em; color: var(--text-strong); }
+  .login-logo .word .kc { color: var(--gold-700); }
+  .login-card h2 {
+    font-family: var(--font-display); font-weight: 800; font-size: 22px;
+    letter-spacing: var(--tracking-tight); color: var(--text-strong); margin-bottom: 6px;
+  }
+  .login-card .hint { font-size: 14px; color: var(--text-muted); margin-bottom: 22px; }
+  .login-card label { display: block; font-weight: 700; font-size: 14px; color: var(--text-strong); margin-bottom: 8px; }
+  .login-card input {
+    width: 100%; border: 1.5px solid var(--border-light); border-radius: var(--radius-md);
+    padding: 13px 15px; font-size: 16px; font-family: inherit;
+    background: var(--paper-50); color: var(--text-body); margin-bottom: 14px;
+    transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+  }
+  .login-card input:focus {
+    outline: none; border-color: var(--gold-500);
+    box-shadow: 0 0 0 3px rgba(200,169,110,0.18);
+  }
+  .login-btn {
+    width: 100%; padding: 15px; background: var(--green-700); color: var(--paper-100);
+    border: none; border-radius: var(--radius-md); font-size: 16px; font-weight: 800;
+    font-family: var(--font-display); letter-spacing: var(--tracking-tight);
+    cursor: pointer; box-shadow: var(--glow-btn);
+    transition: background var(--dur-fast) var(--ease-out);
+  }
+  .login-btn:hover { background: var(--green-600); }
+  .login-err { color: var(--danger-600); font-size: 13px; margin-top: 10px; min-height: 18px; }
+
+  /* refresh button */
+  .refresh-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--font-mono); font-size: 12px; font-weight: 600;
+    color: var(--green-500); background: none; border: none; cursor: pointer;
+    padding: 4px 0; letter-spacing: 0.02em;
+    transition: color var(--dur-fast);
+  }
+  .refresh-btn:hover { color: var(--green-700); }
 </style>
 </head>
 <body>
 
-<!-- LOGIN SCREEN -->
+<!-- ═══════════════════════ LOGIN ═══════════════════════ -->
 <div id="loginScreen">
-  <div class="login">
-    <h2>Junky HSC Admin</h2>
-    <input type="password" id="pwInput" placeholder="Password" onkeydown="if(event.key==='Enter')tryLogin()">
-    <button onclick="tryLogin()">Log in</button>
-    <div class="err" id="loginErr"></div>
+  <div class="login-card">
+    <div class="login-logo">
+      <svg width="36" height="36" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="HaulKC mark on light">
+  <rect width="36" height="36" rx="22" fill="#f0ede6"></rect>
+  <rect x="3" y="3" width="114" height="114" rx="19" fill="none" stroke="#1a3a2a" stroke-opacity="0.25" stroke-width="2"></rect>
+  <path d="M34 38 L58 60 L34 82" stroke="#a98b54" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+  <path d="M62 38 L86 60 L62 82" stroke="#1a3a2a" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+</svg>
+      <span class="word">Haul<span class="kc">KC</span></span>
+    </div>
+    <h2>Crew access</h2>
+    <p class="hint">Job board, booking details, and quick-dial for the day's pickups.</p>
+    <label for="pwInput">Password</label>
+    <input type="password" id="pwInput" placeholder="Enter password" autocomplete="current-password">
+    <button class="login-btn" id="loginBtn">Log in</button>
+    <div class="login-err" id="loginErr"></div>
   </div>
 </div>
 
-<!-- ADMIN DASHBOARD -->
+<!-- ═══════════════════════ DASHBOARD ═══════════════════════ -->
 <div id="dashboard" style="display:none">
-  <div class="wrap">
-    <div class="top-bar">
-      <div>
-        <h1>Junky HSC Jobs</h1>
-        <div class="sub" id="lastRefresh">Loading...</div>
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <a href="#" class="brand" style="text-decoration:none">
+        <svg width="34" height="34" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="HaulKC mark">
+  <rect width="34" height="34" rx="22" fill="#1a3a2a"></rect>
+  <rect x="3" y="3" width="114" height="114" rx="19" fill="none" stroke="#c8a96e" stroke-opacity="0.35" stroke-width="2"></rect>
+  <path d="M34 38 L58 60 L34 82" stroke="#c8a96e" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+  <path d="M62 38 L86 60 L62 82" stroke="#f0ede6" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+</svg>
+        <span class="word">Haul<span class="kc">KC</span></span>
+      </a>
+      <span class="pill">Admin</span>
+    </div>
+    <button class="logout-btn" id="logoutBtn">Log out</button>
+  </div>
+
+  <div class="shell">
+    <div class="page-head">
+      <h1>Today's jobs</h1>
+      <div class="sub">
+        <span class="dot"></span>
+        <span id="lastRefresh">Loading…</span>
+        <button class="refresh-btn" id="refreshBtn" style="margin-left:14px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
+          Refresh
+        </button>
       </div>
-      <span class="logout" onclick="logout()">Log out</span>
     </div>
 
     <div class="stats" id="stats"></div>
 
     <div class="filter" id="filterBar">
-      <button class="on" data-f="all" onclick="setFilter('all',this)">All jobs</button>
-      <button data-f="new" onclick="setFilter('new',this)">New</button>
-      <button data-f="done" onclick="setFilter('done',this)">Done</button>
+      <button class="filter-btn on" data-f="all">All jobs</button>
+      <button class="filter-btn" data-f="new">New</button>
+      <button class="filter-btn" data-f="done">Done</button>
     </div>
 
-    <div id="jobList"><div class="loading">Loading jobs…</div></div>
+    <div id="jobList"></div>
   </div>
 </div>
 
 <script>
-  // No secrets here. Auth + data go through the server endpoint /api/admin-bookings,
-  // which checks the password and uses the secret service-role key server-side.
+  // No secrets here — auth + data go through /api/admin-bookings (server-side service-role key).
   let allJobs = [], currentFilter = "all", sessionPw = "";
 
   async function api(action, extra){
@@ -92,6 +537,19 @@
       body: JSON.stringify({ password: sessionPw, action, ...(extra||{}) })
     });
   }
+
+  /* ── Auth ── */
+  document.getElementById("loginBtn").addEventListener("click", tryLogin);
+  document.getElementById("pwInput").addEventListener("keydown", e => { if(e.key==="Enter") tryLogin(); });
+  document.getElementById("logoutBtn").addEventListener("click", logout);
+  document.getElementById("refreshBtn").addEventListener("click", loadJobs);
+  document.getElementById("filterBar").addEventListener("click", e => {
+    const btn = e.target.closest(".filter-btn"); if(!btn) return;
+    currentFilter = btn.dataset.f;
+    document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("on"));
+    btn.classList.add("on");
+    renderJobs();
+  });
 
   async function tryLogin(){
     const pw = document.getElementById("pwInput").value;
@@ -106,7 +564,8 @@
       document.getElementById("dashboard").style.display = "block";
       renderStats();
       renderJobs();
-      document.getElementById("lastRefresh").textContent = "Last updated: "+new Date().toLocaleTimeString();
+      document.getElementById("lastRefresh").textContent =
+        "Updated " + new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
     } catch(e){
       sessionPw = "";
       document.getElementById("loginErr").textContent =
@@ -116,9 +575,10 @@
 
   function logout(){
     sessionPw = "";
-    document.getElementById("loginScreen").style.display = "block";
+    document.getElementById("loginScreen").style.display = "flex";
     document.getElementById("dashboard").style.display = "none";
     document.getElementById("pwInput").value = "";
+    document.getElementById("loginErr").textContent = "";
   }
 
   async function loadJobs(){
@@ -129,54 +589,72 @@
       allJobs = await r.json();
       renderStats();
       renderJobs();
-      document.getElementById("lastRefresh").textContent = "Last updated: "+new Date().toLocaleTimeString();
+      document.getElementById("lastRefresh").textContent =
+        "Updated " + new Date().toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
     } catch(e){
-      document.getElementById("jobList").innerHTML = '<div class="empty">Failed to load — check your connection.</div>';
+      document.getElementById("jobList").innerHTML = '<div class="empty"><span>—</span>Failed to load — check your connection.</div>';
     }
   }
 
   function renderStats(){
-    const total = allJobs.length;
-    const newJobs = allJobs.filter(j=>j.status==="new").length;
-    const revenue = allJobs.reduce((s,j)=>s+(j.starting_price||0),0);
+    const total   = allJobs.length;
+    const newJobs = allJobs.filter(j => j.status==="new").length;
+    const revenue = allJobs.reduce((s,j) => s + (j.starting_price||0), 0);
     document.getElementById("stats").innerHTML = `
       <div class="stat"><div class="n">${total}</div><div class="l">Total bookings</div></div>
-      <div class="stat"><div class="n" style="color:var(--hi)">${newJobs}</div><div class="l">Need attention</div></div>
-      <div class="stat"><div class="n">$${revenue.toLocaleString()}</div><div class="l">Starting price total</div></div>
+      <div class="stat"><div class="n alert">${newJobs}</div><div class="l">Need attention</div></div>
+      <div class="stat"><div class="n revenue">$${revenue.toLocaleString()}</div><div class="l">Starting price total</div></div>
     `;
   }
 
-  function setFilter(f, btn){
-    currentFilter = f;
-    document.querySelectorAll(".filter button").forEach(b=>b.classList.remove("on"));
-    btn.classList.add("on");
-    renderJobs();
-  }
-
   function renderJobs(){
-    const jobs = currentFilter==="all" ? allJobs : allJobs.filter(j=>j.status===currentFilter);
+    const jobs = currentFilter==="all" ? allJobs : allJobs.filter(j => j.status===currentFilter);
+    const el = document.getElementById("jobList");
     if(!jobs.length){
-      document.getElementById("jobList").innerHTML = '<div class="empty">No jobs here yet.</div>';
+      el.innerHTML = '<div class="empty"><span>—</span>No jobs in this view.</div>';
       return;
     }
-    document.getElementById("jobList").innerHTML = jobs.map(j=>`
+    el.innerHTML = jobs.map(j => `
       <div class="job" id="job-${j.id}">
         <div class="job-top">
-          <div class="job-name">${j.name || "Unknown"}</div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+            <span class="job-name">${j.name || "Unknown"}</span>
+            <span class="status-badge ${j.status}">${j.status==="new" ? "New" : "Done"}</span>
+          </div>
           <div class="job-price">$${j.starting_price || 0}+</div>
         </div>
         <div class="job-meta">
-          <span class="tag ${j.status==='new'?'new':'done'}">${j.status==='new'?'NEW':'DONE'}</span>
-          <span class="tag">📅 ${j.pickup_date||'No date'} ${j.time_window||''}</span>
-          <span class="tag">📦 ${j.load||'Unknown load'}</span>
-          ${j.addons&&j.addons!=='none'?`<span class="tag">+ ${j.addons}</span>`:''}
-          <span class="tag">📍 ${j.address||'No address'}, ${j.zip||''}</span>
-          <span class="tag">📞 ${j.phone||'No phone'}</span>
-          ${j.email?`<span class="tag">✉ ${j.email}</span>`:''}
+          <span class="meta-tag">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            ${j.pickup_date || "No date"} · ${j.time_window || ""}
+          </span>
+          <span class="meta-tag">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14M5 8a2 2 0 1 0 0-4h-1a2 2 0 0 1-2-2V2M5 8l-1 13h16L19 8M9 11v5m6-5v5"/></svg>
+            ${j.load || "Unknown load"}
+          </span>
+          ${j.addons && j.addons!=="none" ? `<span class="meta-tag">+ ${j.addons}</span>` : ""}
+          <span class="meta-tag">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            ${j.address || "No address"}, ${j.zip || ""}
+          </span>
+          <span class="meta-tag">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            ${j.phone || "No phone"}
+          </span>
+          ${j.email ? `<span class="meta-tag">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+            ${j.email}
+          </span>` : ""}
         </div>
         <div class="job-actions">
-          ${j.phone?`<button class="btn btn-call" onclick="window.location='tel:${j.phone}'">Call ${j.name||'customer'}</button>`:''}
-          ${j.status==='new'?`<button class="btn btn-done" onclick="markDone(${j.id})">Mark done</button>`:''}
+          ${j.phone ? `<button class="btn btn-call" onclick="window.location='tel:${j.phone.replace(/\D/g,'')}'" >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            Call ${j.name ? j.name.split(" ")[0] : "customer"}
+          </button>` : ""}
+          ${j.status==="new" ? `<button class="btn btn-done" onclick="markDone(${j.id})">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Mark done
+          </button>` : ""}
         </div>
       </div>
     `).join("");
@@ -187,11 +665,12 @@
       const r = await api("markDone", { id });
       if(!r.ok) throw new Error("update failed");
     } catch(e){ return; }
-    allJobs = allJobs.map(j=>j.id===id?{...j,status:"done"}:j);
-    renderStats(); renderJobs();
+    allJobs = allJobs.map(j => j.id===id ? {...j, status:"done"} : j);
+    renderStats();
+    renderJobs();
   }
 
-  // auto-refresh every 60 seconds
+  /* Auto-refresh every 60s */
   setInterval(loadJobs, 60000);
 </script>
 </body>
