@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Junky HSC — Junk Removal KC</title>
+<title>HaulKC — Same-Day Junk Removal Kansas City</title>
 <style>
   :root {
     --ink: #1a1f1c; --paper: #f3f0e9; --steel: #3a4a3f;
@@ -18,6 +18,11 @@
   h1 { font-size: clamp(30px, 8vw, 44px); line-height: 1.02; margin: 16px 0 8px; font-weight: 800; letter-spacing: -0.02em; }
   h1 .swing { color: var(--hi); }
   .sub { color: var(--muted); font-size: 16px; max-width: 38ch; }
+  .trust-bar { display: flex; align-items: center; gap: 20px; margin-top: 18px; padding: 14px 16px; background: #fff; border: 1.5px solid var(--line); border-radius: 10px; flex-wrap: wrap; }
+  .trust-item { display: flex; align-items: center; gap: 7px; font-size: 14px; font-weight: 600; color: var(--steel); }
+  .trust-item svg { flex-shrink: 0; }
+  .trust-phone { font-size: 15px; font-weight: 800; color: var(--hi-dark); text-decoration: none; margin-left: auto; }
+  .trust-phone:hover { text-decoration: underline; }
   .card { background: #fff; border: 1.5px solid var(--line); border-radius: 10px; padding: 22px; margin-top: 22px; }
   .step-num { font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--hi-dark); font-weight: 700; margin-bottom: 4px; }
   .step-q { font-size: 19px; font-weight: 700; margin-bottom: 14px; }
@@ -69,9 +74,23 @@
   <header>
     <span class="badge">Same-day junk removal · Kansas City</span>
     <h1>Price in 30 seconds.<br><span class="swing">We haul the rest.</span></h1>
-    <p class="sub">Tell us what you've got. Get a real starting price right now — no waiting on a callback.</p>
+    <p class="sub">No callbacks. No quotes that take a week. Tell us what you've got and book right now.</p>
+    <div class="trust-bar">
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#3a4a3f" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#3a4a3f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        KC locals
+      </div>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#3a4a3f" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#3a4a3f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Pay on-site
+      </div>
+      <div class="trust-item">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#3a4a3f" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#3a4a3f" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Same-day available
+      </div>
+      <a class="trust-phone" href="tel:8163845010">(816) 384-5010</a>
+    </div>
   </header>
-
   <div class="card">
     <div class="step-num">Step 1</div>
     <div class="step-q">How much junk are we talking?</div>
@@ -83,7 +102,6 @@
       <button class="fill" data-key="Full trailer" data-price="450"><span class="gauge"><i style="height:100%"></i></span><span><span class="label">Full trailer</span><span class="ex">A whole garage, big move-out</span></span><span class="price">from $450</span></button>
     </div>
   </div>
-
   <div class="card">
     <div class="step-num">Step 2</div>
     <div class="step-q">Anything extra? <span style="font-weight:400;color:var(--muted);font-size:15px">(optional)</span></div>
@@ -94,7 +112,6 @@
       <label class="addon"><input type="checkbox" data-price="30" data-label="Tires/mattresses"> Tires or mattresses (special dump fee) <span class="plus">+$30</span></label>
     </div>
   </div>
-
   <div class="card">
     <div class="step-num">Step 3</div>
     <div class="step-q">When works for you?</div>
@@ -107,7 +124,6 @@
       <button class="win" data-key="Evening">Evening<span class="t">5–8pm</span></button>
     </div>
   </div>
-
   <div class="card">
     <div class="step-num">Step 4</div>
     <div class="step-q">Where and who?</div>
@@ -122,25 +138,20 @@
     <label class="q" for="email">Email (confirmation sent here)</label>
     <input type="email" id="email" placeholder="you@email.com">
   </div>
-
   <div id="quoteBox" class="quote hidden">
     <div class="lead">Your starting price</div>
     <div class="amt" id="amt">$0</div>
     <p class="note" id="quoteNote">Final price confirmed on-site once the crew sees the load.</p>
   </div>
-
   <div id="errBox" class="err hidden"></div>
   <button class="book" id="bookBtn" disabled>Pick how much junk first</button>
   <p class="fineprint">Book now, pay when the job's done. No deposit required.</p>
 </div>
-
 <script>
   // ─── CONFIG ───────────────────────────────────────────────
   const SUPABASE_URL = "https://okogabnckgvxlruhmniu.supabase.co";
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rb2dhYm5ja2d2eGxydWhtbml1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNDk2NzMsImV4cCI6MjA5NjYyNTY3M30.peGdhDaxF2UaMeqC7HcAEMmry6Z4DRmIyaiAhM0KHpA";
-
-  // ─── SERVICE AREA zips (within ~40 min of KC) ─────────────
-  // ADD YOUR REAL ZIPS HERE — these are examples
+  // ─── SERVICE AREA zips ────────────────────────────────────
   const SERVICE_ZIPS = [
     "64101","64102","64105","64106","64108","64109","64110","64111","64112",
     "64113","64114","64116","64117","64118","64119","64120","64123","64124",
@@ -153,19 +164,12 @@
     "66211","66212","66213","66214","66215","66216","66217","66218","66219",
     "66220","66221","66223","66224","66226","66227"
   ];
-
-  // ─── CREW EMAIL — set this to your friends' email ─────────
-  const CREW_EMAIL = "crew@junkyhsc.com"; // CHANGE THIS
-
   const state = { fillKey:"", fillPrice:0, addonTotal:0, addons:[], window:"" };
   const $ = id => document.getElementById(id);
-
   const fills=$("fills"), addonsEl=$("addons"), windows=$("windows"),
         quoteBox=$("quoteBox"), amt=$("amt"), quoteNote=$("quoteNote"),
         bookBtn=$("bookBtn"), zipEl=$("zip"), dateEl=$("date"), errBox=$("errBox");
-
   dateEl.min = new Date().toISOString().split("T")[0];
-
   fills.addEventListener("click", e => {
     const b = e.target.closest(".fill"); if(!b) return;
     [...fills.children].forEach(x=>x.classList.remove("on"));
@@ -185,9 +189,7 @@
     b.classList.add("on"); state.window=b.dataset.key; update();
   });
   zipEl.addEventListener("input", update);
-
   function total(){ return state.fillPrice + state.addonTotal; }
-
   function update(){
     errBox.classList.add("hidden");
     if(!state.fillPrice){
@@ -206,9 +208,7 @@
     quoteNote.textContent="Starting price. Final amount confirmed on-site once the crew sees the load.";
     bookBtn.disabled=false; bookBtn.textContent="Book this pickup →";
   }
-
   bookBtn.addEventListener("click", submitBooking);
-
   async function submitBooking(){
     if(bookBtn.disabled) return;
     const booking = {
@@ -224,7 +224,6 @@
       email: $("email").value.trim(),
       status: "new"
     };
-
     const missing = [];
     if(!booking.pickup_date) missing.push("pickup day");
     if(!booking.time_window) missing.push("time of day");
@@ -237,9 +236,7 @@
       errBox.scrollIntoView({behavior:"smooth", block:"center"});
       return;
     }
-
     bookBtn.disabled=true; bookBtn.textContent="Booking…";
-
     // 1. Save to Supabase
     let saved = false;
     try {
@@ -256,14 +253,16 @@
       saved = r.ok;
       if(!r.ok){ const t=await r.text(); console.error("Supabase error:", t); }
     } catch(e){ console.error("Supabase fetch failed:", e); }
-
-    // 2. Send email via Resend (needs to go through your backend — see note below)
-    // For now we log it; hook up after Vercel deploy with an API route
-    console.log("📬 New booking — email would go to crew:", booking);
-
+    // 2. Notify crew
+    try {
+      await fetch('/api/notify-crew', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(booking)
+      });
+    } catch(e){ console.error("Notify failed:", e); }
     showConfirmation(booking, saved);
   }
-
   function showConfirmation(b, saved){
     $("app").innerHTML = `
       <div class="done">
@@ -280,6 +279,7 @@
           <div><span class="k">Phone</span><span class="v">${b.phone}</span></div>
         </div>
         <p class="fineprint">${saved ? "✓ Booking saved. See you soon." : "⚠ Booking saved locally — check Supabase keys if this persists."}</p>
+        <p class="fineprint" style="margin-top:8px">Questions? Call or text <a href="tel:8163845010" style="color:var(--hi-dark);font-weight:700">(816) 384-5010</a></p>
       </div>`;
     window.scrollTo(0,0);
   }
