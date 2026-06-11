@@ -1,0 +1,9 @@
+{
+  "name": "haulkc",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HaulKC — same-day junk removal booking site (Kansas City).",
+  "dependencies": {
+    "resend": "^4.0.0"
+  }
+}

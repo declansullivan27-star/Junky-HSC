@@ -26,12 +26,23 @@ export default async function handler(req, res) {
     return res.status(500).json({ ok: false, error: 'no recipients configured' });
   }
 
+  // Optional photos: the booking page resizes images client-side and sends them
+  // as base64. Cap the count/size defensively so we never build a huge email.
+  const photos = Array.isArray(b.photos) ? b.photos.slice(0, 6) : [];
+  const attachments = photos
+    .filter(p => p && p.content)
+    .map((p, i) => ({
+      filename: (p.filename || `photo-${i + 1}.jpg`),
+      content: Buffer.from(p.content, 'base64')
+    }));
+
   try {
     const { data, error } = await resend.emails.send({
       from,
       to,
       replyTo: b.email || undefined,
       subject: `New booking — ${b.load} on ${b.pickup_date}`,
+      attachments: attachments.length ? attachments : undefined,
       html: `
         <h2>New HaulKC Booking</h2>
         <table>
@@ -43,6 +54,7 @@ export default async function handler(req, res) {
           <tr><td><b>Price</b></td><td>$${b.starting_price}+</td></tr>
           <tr><td><b>Date</b></td><td>${b.pickup_date} — ${b.time_window}</td></tr>
           <tr><td><b>Email</b></td><td>${b.email}</td></tr>
+          <tr><td><b>Photos</b></td><td>${attachments.length ? attachments.length + ' attached' : 'none'}</td></tr>
         </table>
       `
     });

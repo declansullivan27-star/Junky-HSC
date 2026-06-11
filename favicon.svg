@@ -1,0 +1,6 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="HaulKC">
+  <rect width="120" height="120" rx="26" fill="#102619"/>
+  <rect x="3" y="3" width="114" height="114" rx="23" fill="none" stroke="#c8a96e" stroke-opacity="0.35" stroke-width="2"/>
+  <path d="M34 38 L58 60 L34 82" stroke="#c8a96e" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M62 38 L86 60 L62 82" stroke="#f0ede6" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

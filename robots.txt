@@ -1,0 +1,8 @@
+# HaulKC — robots
+# NOTE: update the Sitemap host below to your real production domain.
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /api/
+
+Sitemap: https://haulkc.com/sitemap.xml
