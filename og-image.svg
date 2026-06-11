@@ -1,0 +1,38 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- HaulKC social share card.
+       NOTE: most social platforms (Facebook, iMessage, LinkedIn, X) do NOT
+       render SVG OG images. Export this to og-image.png at 1200x630 and the
+       <meta property="og:image"> tag will light up with a real preview. -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0c1b13"/>
+      <stop offset="1" stop-color="#16341f"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="30" y="30" width="1140" height="570" rx="22" fill="none" stroke="#c8a96e" stroke-opacity="0.3" stroke-width="2"/>
+
+  <!-- mark -->
+  <g transform="translate(90,90)">
+    <rect width="96" height="96" rx="22" fill="#1a3a2a"/>
+    <path d="M28 30 L48 48 L28 66" stroke="#c8a96e" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <path d="M50 30 L70 48 L50 66" stroke="#f0ede6" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+  <text x="206" y="158" font-family="Archivo, Arial, sans-serif" font-size="44" font-weight="800" fill="#f0ede6">Haul<tspan fill="#c8a96e">KC</tspan></text>
+
+  <!-- headline -->
+  <text x="90" y="330" font-family="Archivo, Arial, sans-serif" font-size="104" font-weight="800" letter-spacing="-3" fill="#f0ede6">Consider it gone.</text>
+  <text x="90" y="400" font-family="Archivo, Arial, sans-serif" font-size="38" font-weight="500" fill="#8fbca2">Same-day junk removal &amp; hauling in Kansas City</text>
+
+  <!-- chips -->
+  <g font-family="Spline Sans Mono, monospace" font-size="24" font-weight="600">
+    <rect x="90" y="450" width="300" height="58" rx="29" fill="#142f20" stroke="#ffffff" stroke-opacity="0.12"/>
+    <text x="120" y="488" fill="#f0ede6">Price in 30 seconds</text>
+    <rect x="410" y="450" width="230" height="58" rx="29" fill="#142f20" stroke="#ffffff" stroke-opacity="0.12"/>
+    <text x="440" y="488" fill="#f0ede6">No deposit</text>
+    <rect x="660" y="450" width="250" height="58" rx="29" fill="#142f20" stroke="#ffffff" stroke-opacity="0.12"/>
+    <text x="690" y="488" fill="#f0ede6">Pay on-site</text>
+  </g>
+
+  <text x="90" y="572" font-family="Spline Sans Mono, monospace" font-size="30" font-weight="600" fill="#c8a96e">(816) 384-5010</text>
+</svg>
