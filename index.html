@@ -613,7 +613,49 @@
 <script>
   const SUPABASE_URL = "https://okogabnckgvxlruhmniu.supabase.co";
   const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9rb2dhYm5ja2d2eGxydWhtbml1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEwNDk2NzMsImV4cCI6MjA5NjYyNTY3M30.peGdhDaxF2UaMeqC7HcAEMmry6Z4DRmIyaiAhM0KHpA";
-  const SERVICE_ZIPS = ["64101","64102","64105","64106","64108","64109","64110","64111","64112","64113","64114","64116","64117","64118","64119","64120","64123","64124","64125","64126","64127","64128","64129","64130","64131","64132","64133","64134","64136","64137","64138","64139","64145","64146","64147","64149","64150","64151","64152","64153","64154","64155","64156","64157","64158","64161","64163","64164","64165","64166","64167","64168","64170","66101","66102","66103","66104","66105","66106","66109","66111","66112","66202","66203","66204","66205","66206","66207","66208","66209","66210","66211","66212","66213","66214","66215","66216","66217","66218","66219","66220","66221","66223","66224","66226","66227"];
+  // KC metro service area — covers roughly 30-mile radius from downtown KC.
+  // MO: KCMO core, Independence, Blue Springs, Lee's Summit, Liberty, Grandview, Belton, Raymore.
+  // KS: KCK, Overland Park, Olathe, Shawnee, Lenexa, Leawood, Prairie Village, Merriam, Mission.
+  const SERVICE_ZIPS = [
+    // Belton / South KC MO
+    "64012",
+    // Blue Springs MO
+    "64014","64015",
+    // Grandview MO
+    "64030",
+    // Independence MO
+    "64050","64052","64053","64054","64055","64056","64057",
+    // Lee's Summit MO
+    "64063","64064","64082","64086",
+    // Liberty MO
+    "64068",
+    // Raymore MO
+    "64083",
+    // Kansas City MO (core city + Northland + South KC)
+    "64101","64102","64105","64106","64108","64109","64110","64111","64112","64113","64114",
+    "64116","64117","64118","64119","64120","64123","64124","64125","64126","64127","64128",
+    "64129","64130","64131","64132","64133","64134","64136","64137","64138","64139","64145",
+    "64146","64147","64149","64150","64151","64152","64153","64154","64155","64156","64157",
+    "64158","64161","64163","64164","64165","64166","64167","64168","64170",
+    // Olathe KS
+    "66061","66062","66063",
+    // Kansas City KS (KCK)
+    "66101","66102","66103","66104","66105","66106","66109","66111","66112",
+    // Merriam / Mission / Fairway KS
+    "66202","66203","66204","66205",
+    // Prairie Village / Westwood KS
+    "66206","66207","66208",
+    // Leawood / Overland Park KS (north)
+    "66209","66210","66211","66212","66213","66214","66215",
+    // Shawnee KS
+    "66216","66217","66218",
+    // Lenexa KS
+    "66219","66220",
+    // Overland Park KS (south) / Leawood south
+    "66221","66223","66224","66226",
+    // Lenexa / south Shawnee KS
+    "66227"
+  ];
   const state = { fillKey:"", fillPrice:0, addonTotal:0, addons:[], window:"" };
   const $ = id => document.getElementById(id);
   const fills=$("fills"), addonsEl=$("addons"), windows=$("windows"),
