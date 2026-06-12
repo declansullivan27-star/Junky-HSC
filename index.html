@@ -10,7 +10,7 @@
      real production domain so canonical/OG/sitemap URLs resolve.
      ============================================================ -->
 <title>Kansas City Junk Removal &amp; Hauling | Same-Day Pickup | HaulKC</title>
-<meta name="description" content="Same-day junk removal and hauling in Kansas City. Upfront pricing in 30 seconds, no deposit, pay when the job's done. Furniture, appliance, yard waste &amp; construction debris removal across KC MO, KCK, Overland Park, Olathe, Lee's Summit &amp; Independence. Call (816) 384-5010.">
+<meta name="description" content="Same-day junk removal in Kansas City — furniture, appliances, yard waste &amp; construction debris. Upfront price in 30 sec, no deposit, pay when done. Serving KC MO, KCK, Overland Park, Olathe, Lee's Summit &amp; Independence. Call (816) 384-5010.">
 <meta name="keywords" content="Kansas City junk removal, Kansas City hauling, furniture removal KC, appliance removal KC, yard waste removal KC, construction debris removal KC, same day junk removal Kansas City, junk hauling Overland Park, junk removal Olathe">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="HaulKC">
@@ -67,14 +67,16 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@type": ["LocalBusiness", "HomeAndConstructionBusiness"],
   "@id": "https://haulkc.com/#business",
   "name": "HaulKC",
+  "alternateName": "Haul KC",
+  "slogan": "Consider it gone.",
   "image": "https://haulkc.com/og-image.png",
   "url": "https://haulkc.com/",
   "telephone": "+1-816-384-5010",
   "priceRange": "$$",
-  "description": "Same-day junk removal and hauling in Kansas City. Furniture, appliance, yard waste and construction debris removal with upfront pricing and no deposit.",
+  "description": "Same-day junk removal and hauling in Kansas City. Furniture, appliance, yard waste and construction debris removal with upfront pricing and no deposit. Serving KC MO, KCK, Overland Park, Olathe, Lee's Summit, Independence and the entire KC metro.",
   "address": {
     "@type": "PostalAddress",
     "addressLocality": "Kansas City",
@@ -86,16 +88,28 @@
     "latitude": 39.0997,
     "longitude": -94.5786
   },
+  "serviceArea": {
+    "@type": "GeoCircle",
+    "geoMidpoint": { "@type": "GeoCoordinates", "latitude": 39.0997, "longitude": -94.5786 },
+    "geoRadius": "48280"
+  },
   "areaServed": [
-    { "@type": "City", "name": "Kansas City, MO" },
-    { "@type": "City", "name": "Kansas City, KS" },
-    { "@type": "City", "name": "Overland Park, KS" },
-    { "@type": "City", "name": "Olathe, KS" },
-    { "@type": "City", "name": "Lee's Summit, MO" },
-    { "@type": "City", "name": "Independence, MO" },
-    { "@type": "City", "name": "Shawnee, KS" },
-    { "@type": "City", "name": "Lenexa, KS" },
-    { "@type": "City", "name": "Blue Springs, MO" }
+    { "@type": "City", "name": "Kansas City", "containedInPlace": { "@type": "State", "name": "Missouri" } },
+    { "@type": "City", "name": "Kansas City", "containedInPlace": { "@type": "State", "name": "Kansas" } },
+    { "@type": "City", "name": "Overland Park", "containedInPlace": { "@type": "State", "name": "Kansas" } },
+    { "@type": "City", "name": "Olathe", "containedInPlace": { "@type": "State", "name": "Kansas" } },
+    { "@type": "City", "name": "Shawnee", "containedInPlace": { "@type": "State", "name": "Kansas" } },
+    { "@type": "City", "name": "Lenexa", "containedInPlace": { "@type": "State", "name": "Kansas" } },
+    { "@type": "City", "name": "Leawood", "containedInPlace": { "@type": "State", "name": "Kansas" } },
+    { "@type": "City", "name": "Prairie Village", "containedInPlace": { "@type": "State", "name": "Kansas" } },
+    { "@type": "City", "name": "Merriam", "containedInPlace": { "@type": "State", "name": "Kansas" } },
+    { "@type": "City", "name": "Lee's Summit", "containedInPlace": { "@type": "State", "name": "Missouri" } },
+    { "@type": "City", "name": "Independence", "containedInPlace": { "@type": "State", "name": "Missouri" } },
+    { "@type": "City", "name": "Blue Springs", "containedInPlace": { "@type": "State", "name": "Missouri" } },
+    { "@type": "City", "name": "Liberty", "containedInPlace": { "@type": "State", "name": "Missouri" } },
+    { "@type": "City", "name": "Grandview", "containedInPlace": { "@type": "State", "name": "Missouri" } },
+    { "@type": "City", "name": "Belton", "containedInPlace": { "@type": "State", "name": "Missouri" } },
+    { "@type": "City", "name": "Raymore", "containedInPlace": { "@type": "State", "name": "Missouri" } }
   ],
   "openingHoursSpecification": [
     {
@@ -105,16 +119,27 @@
       "closes": "20:00"
     }
   ],
+  "potentialAction": {
+    "@type": "ReserveAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "https://haulkc.com/#book",
+      "inLanguage": "en-US",
+      "actionPlatform": ["http://schema.org/DesktopWebPlatform","http://schema.org/MobileWebPlatform"]
+    },
+    "result": { "@type": "Reservation", "name": "Junk removal booking" }
+  },
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
-    "name": "Junk removal services",
+    "name": "Kansas City junk removal services",
     "itemListElement": [
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Furniture removal" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Appliance removal" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Yard waste removal" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Construction debris removal" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Garage & estate cleanouts" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Mattress & hot tub removal" } }
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Furniture removal Kansas City" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Appliance removal Kansas City" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Yard waste removal Kansas City" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Construction debris removal Kansas City" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Garage and estate cleanouts Kansas City" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Mattress and hot tub removal Kansas City" } },
+      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Same-day junk hauling Kansas City" } }
     ]
   }
 }
@@ -155,6 +180,11 @@
       "@type": "Question",
       "name": "Do I need to move the junk to the curb?",
       "acceptedAnswer": { "@type": "Answer", "text": "No. Our crew does all the lifting and loading — from the basement, attic, backyard or wherever it sits. Just point and it's gone." }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to be home for the junk pickup?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. You don't need to be home. Just make sure the items are accessible when we arrive and we'll take care of everything. We'll text you when the job is done and you can pay via Venmo at your convenience." }
     }
   ]
 }
@@ -1014,7 +1044,7 @@
         <div class="steps3">
           <div class="step3"><div class="n">1</div><h3>Get your price</h3><p>Tell us how much junk you've got and get a real starting price in about 30 seconds — right here, no phone tag.</p></div>
           <div class="step3"><div class="n">2</div><h3>Pick your window</h3><p>Choose a day and a morning, afternoon or evening window. Same-day and next-day spots open up across the metro.</p></div>
-          <div class="step3"><div class="n">3</div><h3>We haul it away</h3><p>Our crew does all the lifting and loading, sweeps up, and you pay only when it's done and gone — cash or Venmo in person. No deposit.</p></div>
+          <div class="step3"><div class="n">3</div><h3>We haul it away</h3><p>Our crew does all the lifting, loading, and sweeping up. You don't even need to be home — we text you when it's done, and you pay via Venmo at your convenience. No deposit ever.</p></div>
         </div>
       </div>
     </section>
@@ -1091,8 +1121,8 @@
         <div class="area-grid">
           <div class="area-copy">
             <span class="eyebrow"><span class="dot" style="background:var(--gold-500);box-shadow:0 0 10px var(--gold-500)"></span> Where we haul</span>
-            <h2 id="area-h">Serving the whole Kansas City metro</h2>
-            <p>HaulKC covers both sides of the state line — from the River Market to the south suburbs, and from KCK across to Lee's Summit. If you're within about 30 minutes of downtown, we've got you.</p>
+            <h2 id="area-h">Junk removal across the Kansas City metro</h2>
+            <p>HaulKC covers both sides of the state line — furniture removal in Overland Park, appliance pickup in Olathe, construction debris hauling in Lee's Summit, estate cleanouts in Independence, and everything in between. If you're within about 30 minutes of downtown Kansas City, we've got you.</p>
             <p>Not sure if you're in range? Drop your ZIP into the quote tool and we'll tell you on the spot, or just call <a href="tel:8163845010" style="color:var(--gold-500);font-weight:700;text-decoration:none">(816) 384-5010</a>.</p>
             <a class="btn-gold" href="#book" style="margin-top:8px">Check my ZIP <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
           </div>
@@ -1198,6 +1228,7 @@
           <details class="faq"><summary>What kind of junk do you haul away?<span class="ico" aria-hidden="true"></span></summary><div class="ans">Furniture, mattresses, appliances, yard waste, construction and remodeling debris, garage and estate cleanouts, hot tubs, tires and more. If it's legal to haul, we'll take it — and we donate and recycle whatever we can.</div></details>
           <details class="faq"><summary>Do I have to pay a deposit?<span class="ico" aria-hidden="true"></span></summary><div class="ans">No deposit. You book for free and pay in person — cash or Venmo — when the job is done, only after you've seen the work finished and approved the final price.</div></details>
           <details class="faq"><summary>Do I need to move the junk to the curb?<span class="ico" aria-hidden="true"></span></summary><div class="ans">Nope. Our crew does all the lifting and loading — from the basement, attic, backyard or wherever it sits. Just point, and consider it gone.</div></details>
+          <details class="faq"><summary>Do I need to be home for the pickup?<span class="ico" aria-hidden="true"></span></summary><div class="ans">No — you don't need to be there. Just make sure the items are accessible when we arrive and we'll handle everything. We'll text you when the load is gone, and you can pay via Venmo whenever it's convenient for you.</div></details>
         </div>
       </div>
     </section>
