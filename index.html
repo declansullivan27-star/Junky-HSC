@@ -452,7 +452,7 @@
   html { scroll-behavior: smooth; scroll-padding-top: 80px; }
   body {
     font-family: var(--font-body);
-    background: var(--green-900);
+    background: var(--green-950);
     color: var(--text-on-dark);
     -webkit-font-smoothing: antialiased;
     line-height: 1.55;
@@ -710,9 +710,9 @@
 
   /* ---------- Marketing sections ---------- */
   section[id] { scroll-margin-top: 80px; }
-  .band { padding: clamp(56px, 9vw, 104px) clamp(20px, 5vw, 48px); }
+  .band { padding: clamp(72px, 11vw, 128px) clamp(20px, 5vw, 48px); border-top: 1px solid var(--border-dark); }
   .band.alt { background: var(--green-950); }
-  .band.brand { background: var(--green-700); }
+  .band.brand { background: var(--green-700); border-top: none; }
   .wrap { max-width: var(--container-wide); margin: 0 auto; }
   .sec-head { max-width: 720px; margin: 0 auto clamp(36px, 5vw, 56px); text-align: center; }
   .sec-head .eyebrow { justify-content: center; }
@@ -856,18 +856,27 @@
   /* ===== IMMERSIVE HERO ===== */
   .hero-immersive {
     position: relative; min-height: 100dvh; display: flex; align-items: center; justify-content: center;
-    overflow: hidden; background: var(--green-900);
+    overflow: hidden;
+    background: radial-gradient(125% 95% at 50% 8%, var(--green-850) 0%, var(--green-900) 48%, var(--green-950) 100%);
+  }
+  .hero-immersive::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, transparent 40%, rgba(12,27,19,0.6) 100%);
+  }
+  .hero-bottom-fade {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 170px; pointer-events: none; z-index: 1;
+    background: linear-gradient(to bottom, transparent, var(--green-950));
   }
   .chev-field {
-    position: absolute; inset: 0; perspective: 950px; transform-style: preserve-3d;
-    pointer-events: none; transition: transform 0.6s var(--ease-out);
+    position: absolute; inset: 0; perspective: 950px; perspective-origin: 50% 42%;
+    transform-style: preserve-3d; pointer-events: none; transition: transform 0.6s var(--ease-out);
   }
   .chev-item { position: absolute; will-change: transform, opacity; }
   @keyframes hkcFly {
-    0%   { transform: translateZ(-600px) rotateX(14deg); opacity: 0; }
-    8%   { opacity: 0.65; }
-    80%  { opacity: 0.45; }
-    100% { transform: translateZ(320px) rotateX(-5deg); opacity: 0; }
+    0%   { transform: translateZ(-2400px); opacity: 0; }
+    6%   { opacity: 0.5; }
+    75%  { opacity: 0.26; }
+    100% { transform: translateZ(380px); opacity: 0; }
   }
   @keyframes hkcBob {
     0%, 100% { transform: translateX(-50%) translateY(0); }
@@ -875,20 +884,27 @@
   }
   .hero-content {
     position: relative; z-index: 2; text-align: center;
-    padding: 0 clamp(20px, 5vw, 48px); max-width: 900px;
+    padding: 0 clamp(20px, 5vw, 48px); max-width: 860px;
   }
   .hero-content .eyebrow { justify-content: center; margin-bottom: 28px; }
   .hero-h1 {
     font-family: var(--font-display); font-weight: 800;
-    font-size: clamp(40px, 8.5vw, 84px); line-height: 0.95;
-    letter-spacing: -0.025em; color: var(--paper-100); margin-bottom: 24px;
+    font-size: clamp(44px, 8.4vw, 96px); line-height: 0.96;
+    letter-spacing: -0.02em; color: var(--paper-100); margin-bottom: 22px;
+    max-width: 13ch; margin-left: auto; margin-right: auto;
   }
   .hero-h1 em { color: var(--gold-500); font-style: normal; }
   .hero-sub {
-    font-size: clamp(17px, 2.2vw, 21px); color: var(--green-200);
-    max-width: 50ch; margin: 0 auto 36px; line-height: 1.55;
+    font-size: clamp(17px, 2vw, 21px); color: var(--green-100);
+    max-width: 30rem; margin: 0 auto 36px; line-height: 1.5;
   }
-  .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
+  .hero-trust {
+    display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;
+    font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--green-200);
+  }
+  .hero-trust .td { width: 5px; height: 5px; border-radius: 50%; background: var(--gold-500); flex-shrink: 0; }
   .hero-scroll {
     position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
     display: flex; flex-direction: column; align-items: center; gap: 7px;
@@ -907,44 +923,52 @@
     box-shadow: var(--shadow-card-dark);
   }
   .how-num-card .big-num {
-    font-family: var(--font-mono); font-weight: 800; font-size: 80px; line-height: 1;
-    color: transparent; -webkit-text-stroke: 1.5px var(--green-700);
-    display: block; margin-bottom: 20px; user-select: none;
+    font-family: var(--font-mono); font-weight: 800;
+    font-size: clamp(40px, 7vw, 52px); line-height: 1;
+    color: var(--gold-500); display: block; margin-bottom: 16px; user-select: none;
   }
-  .how-num-card h3 { font: var(--text-h3); font-family: var(--font-display); color: var(--paper-100); margin-bottom: 10px; }
-  .how-num-card p { color: var(--green-200); font-size: 15px; line-height: 1.6; }
+  .how-num-card h3 { font-family: var(--font-display); font-weight: 700; font-size: 21px; color: var(--paper-100); margin-bottom: 10px; }
+  .how-num-card p { color: var(--green-100); font-size: 15.5px; line-height: 1.6; }
 
   /* ===== TILT SERVICE CARDS ===== */
-  .tilt-grid { display: grid; gap: 18px; grid-template-columns: 1fr; }
-  @media (min-width: 600px) { .tilt-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 940px) { .tilt-grid { grid-template-columns: repeat(3, 1fr); } }
+  .tilt-grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(264px, 1fr)); }
+  .tilt-outer { perspective: 900px; }
   .tilt-card {
     background: var(--green-850); border: 1.5px solid var(--border-dark);
-    border-radius: var(--radius-xl); padding: 28px 24px;
+    border-radius: var(--radius-lg); padding: 28px 24px;
     box-shadow: var(--shadow-card-dark); will-change: transform;
     transform-style: preserve-3d; cursor: default;
+    transition: border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), transform 0.2s var(--ease-out);
   }
+  .tilt-card:hover { border-color: var(--gold-500); box-shadow: var(--glow-gold), var(--shadow-card-dark); }
   .tilt-card .ic-lc {
-    width: 48px; height: 48px; border-radius: var(--radius-md);
-    background: var(--green-900); border: 1.5px solid var(--border-dark);
+    width: 50px; height: 50px; border-radius: var(--radius-md);
+    background: var(--green-950); border: 1.5px solid var(--border-dark);
     display: flex; align-items: center; justify-content: center;
     margin-bottom: 18px; color: var(--gold-500);
   }
-  .tilt-card .ic-lc svg { width: 24px; height: 24px; stroke-width: 1.8; }
-  .tilt-card h3 { font: var(--text-h3); font-family: var(--font-display); color: var(--paper-100); margin-bottom: 8px; }
-  .tilt-card p { color: var(--green-200); font-size: 14px; line-height: 1.6; }
+  .tilt-card .ic-lc svg { width: 24px; height: 24px; stroke-width: 1.75; }
+  .tilt-card h3 { font-family: var(--font-display); font-weight: 700; font-size: 19px; color: var(--paper-100); margin-bottom: 8px; }
+  .tilt-card p { color: var(--green-100); font-size: 15px; line-height: 1.6; }
 
   /* ===== BEFORE / AFTER SLIDER ===== */
-  .ba-slider-outer { max-width: 860px; margin: 0 auto; }
+  .ba-layout { display: grid; gap: clamp(36px, 5vw, 64px); grid-template-columns: 1fr; align-items: center; }
+  @media (min-width: 760px) { .ba-layout { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); } }
+  .ba-copy h2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(30px, 5vw, 52px); line-height: 1.05; letter-spacing: -0.02em; color: var(--paper-100); margin-bottom: 16px; }
+  .ba-copy p { color: var(--green-100); font-size: 16px; line-height: 1.6; margin-bottom: 20px; }
+  .ba-copy .ba-meta { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-500); }
+  .ba-slider-outer { max-width: 520px; }
+  @media (max-width: 759px) { .ba-slider-outer { max-width: 100%; } }
   .ba-slider-wrap {
     position: relative; border-radius: var(--radius-xl); overflow: hidden;
     border: 1.5px solid var(--border-dark); box-shadow: var(--shadow-card-dark);
     cursor: ew-resize; user-select: none; touch-action: none;
-    background: var(--green-850);
+    background: var(--green-850); aspect-ratio: 632/738;
   }
-  .ba-img { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; }
+  .ba-img { width: 100%; height: 100%; display: block; object-fit: cover; position: absolute; inset: 0; }
   .ba-placeholder-img {
-    width: 100%; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center;
+    width: 100%; height: 100%; position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
     font-family: var(--font-mono); font-size: 13px; color: var(--green-400); background: var(--green-850);
   }
   .ba-after-layer { position: absolute; inset: 0; clip-path: inset(0 50% 0 0); pointer-events: none; }
@@ -952,54 +976,58 @@
   .ba-after-layer .ba-placeholder-img { position: absolute; inset: 0; }
   .ba-handle {
     position: absolute; top: 0; bottom: 0; left: 50%;
-    width: 3px; background: var(--gold-500); transform: translateX(-50%);
+    width: 2px; background: var(--gold-500); transform: translateX(-50%);
     z-index: 3; pointer-events: none;
   }
   .ba-handle::after {
-    content: ""; position: absolute; top: 50%; left: 50%;
+    content: "« »"; position: absolute; top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 42px; height: 42px; border-radius: 50%;
-    background: var(--gold-500); box-shadow: 0 0 0 4px rgba(200,169,110,0.25);
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--green-900); border: 1.5px solid var(--gold-500);
+    box-shadow: var(--glow-gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-mono); font-size: 14px; font-weight: 700;
+    color: var(--gold-500); line-height: 1;
   }
   .ba-lbl {
-    position: absolute; bottom: 14px; z-index: 4; pointer-events: none;
-    font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+    position: absolute; top: 14px; z-index: 4; pointer-events: none;
+    font-family: var(--font-mono); font-size: 11px; font-weight: 700;
     letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--paper-100); background: rgba(12,27,19,0.75);
     padding: 5px 10px; border-radius: var(--radius-xs);
   }
-  .ba-lbl.l { left: 14px; } .ba-lbl.r { right: 14px; }
+  .ba-lbl.l { left: 14px; background: var(--gold-500); color: var(--ink-900); }
+  .ba-lbl.r { right: 14px; background: rgba(12,27,19,0.75); color: var(--paper-100); }
 
   /* ===== STATS PANEL ===== */
-  .stats-row {
-    display: grid; gap: 2px; grid-template-columns: 1fr;
-    max-width: 860px; margin: 0 auto;
+  .trust-layout { display: grid; gap: clamp(40px, 5vw, 72px); grid-template-columns: 1fr; align-items: center; }
+  @media (min-width: 760px) { .trust-layout { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); } }
+  .trust-copy h2 { font-family: var(--font-display); font-weight: 800; font-size: clamp(30px, 5vw, 52px); line-height: 1.05; letter-spacing: -0.02em; color: var(--paper-100); margin-bottom: 16px; }
+  .trust-copy p { color: var(--green-100); font-size: 16px; line-height: 1.6; }
+  .stats-panel {
+    background: var(--green-900); border: 1.5px solid var(--border-dark);
+    border-radius: var(--radius-xl); overflow: hidden;
   }
-  @media (min-width: 560px) { .stats-row { grid-template-columns: repeat(3, 1fr); } }
   .stat-card {
-    text-align: center; padding: 44px 24px;
-    background: var(--green-850); border: 1.5px solid var(--border-dark);
+    text-align: center; padding: 32px 28px;
+    border-bottom: 1px solid var(--border-dark);
   }
-  .stats-row .stat-card:first-child { border-radius: var(--radius-xl) var(--radius-xl) 0 0; }
-  .stats-row .stat-card:last-child  { border-radius: 0 0 var(--radius-xl) var(--radius-xl); }
-  @media (min-width: 560px) {
-    .stats-row .stat-card:first-child { border-radius: var(--radius-xl) 0 0 var(--radius-xl); }
-    .stats-row .stat-card:last-child  { border-radius: 0 var(--radius-xl) var(--radius-xl) 0; }
-  }
+  .stat-card:last-child { border-bottom: none; }
   .stat-card .s-num {
     font-family: var(--font-mono); font-weight: 800;
-    font-size: clamp(50px, 8vw, 72px); line-height: 1;
-    color: var(--gold-500); display: block; margin-bottom: 8px;
+    font-size: clamp(32px, 5vw, 44px); line-height: 1;
+    color: var(--gold-500); display: block; margin-bottom: 6px;
   }
   .stat-card .s-lbl {
-    font-family: var(--font-mono); font-size: 12px;
-    letter-spacing: 0.12em; text-transform: uppercase; color: var(--green-200);
+    font-size: 15px; color: var(--paper-100); font-weight: 600;
   }
 
   /* ===== PRICING TIERS ===== */
-  .pricing-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
-  @media (min-width: 600px) { .pricing-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (min-width: 940px) { .pricing-grid { grid-template-columns: repeat(4, 1fr); } }
+  .pricing-panel {
+    background: var(--green-700); border-radius: var(--radius-xl);
+    padding: clamp(32px, 5vw, 64px); box-shadow: var(--shadow-card-dark);
+  }
+  .pricing-panel .sec-head { margin-bottom: clamp(28px, 4vw, 44px); }
+  .pricing-grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
   .price-card {
     background: var(--green-850); border: 1.5px solid var(--border-dark);
     border-radius: var(--radius-xl); padding: 28px 22px;
@@ -1034,9 +1062,9 @@
   .price-card.featured .t-cta:hover { background: var(--gold-400); }
 
   /* ===== SCROLL REVEALS ===== */
-  .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.38s var(--ease-out), transform 0.38s var(--ease-out); }
-  .reveal.in { opacity: 1; transform: translateY(0); }
-  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1 !important; transform: none !important; } }
+  .reveal { transform: translateY(22px); transition: transform 0.7s var(--ease-out); }
+  .reveal.in { transform: translateY(0); }
+  @media (prefers-reduced-motion: reduce) { .reveal { transform: none !important; } }
 </style>
 </head>
 <body class="hkc-root">
@@ -1075,16 +1103,24 @@
       <div class="chev-field" id="chevField" aria-hidden="true"></div>
       <div class="hero-content">
         <span class="eyebrow"><span class="dot"></span> Same-day junk removal · Kansas City</span>
-        <h1 id="hero-h1" class="hero-h1">Price in 30 seconds.<br><em>We haul the rest.</em></h1>
-        <p class="hero-sub">Upfront price. No deposit. Pay cash or Venmo when it's done — you don't even need to be home.</p>
+        <h1 id="hero-h1" class="hero-h1">Price in 30 seconds. We haul the rest.</h1>
+        <p class="hero-sub">Tell us what you've got, get an instant price, and pay cash or Venmo when the job's done. No callbacks. No deposit.</p>
         <div class="hero-actions">
-          <a class="btn-gold" href="#book">Get my free price <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-          <a class="btn-ghost" href="tel:8163845010"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg> (816) 384-5010</a>
+          <a class="btn-gold" href="#book" style="height:58px;font-size:17px">Get my price <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+          <a class="btn-ghost" href="tel:8163845010" style="height:58px;font-size:17px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg> (816) 384-5010</a>
+        </div>
+        <div class="hero-trust">
+          <span>KC locals</span>
+          <span class="td" aria-hidden="true"></span>
+          <span>Same-day available</span>
+          <span class="td" aria-hidden="true"></span>
+          <span>Cash or Venmo</span>
         </div>
       </div>
+      <div class="hero-bottom-fade" aria-hidden="true"></div>
       <a class="hero-scroll" href="#book" aria-label="Scroll to booking">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-        Book now
+        Scroll
       </a>
     </section>
 
@@ -1211,24 +1247,24 @@
       <div class="wrap">
         <div class="sec-head reveal">
           <span class="eyebrow"><span class="dot" style="background:var(--gold-500);box-shadow:0 0 10px var(--gold-500)"></span> Dead simple</span>
-          <h2 id="how-h">Junk gone in three steps</h2>
-          <p>No estimators stopping by, no waiting around for callbacks. Price it, book it, and we haul it.</p>
+          <h2 id="how-h">Three steps. Same day.</h2>
+          <p>No callbacks, no quotes that take a week. Tell us what you've got and we move.</p>
         </div>
         <div class="how-num-grid">
           <div class="how-num-card reveal">
             <span class="big-num" aria-hidden="true">01</span>
-            <h3>Get your price</h3>
-            <p>Tell us how much junk you've got and get a real starting price in about 30 seconds — right here, no phone tag.</p>
+            <h3>Tell us what you've got</h3>
+            <p>A couch, a mattress, some boxes, a whole garage. Pick a load size and add the heavy stuff.</p>
           </div>
           <div class="how-num-card reveal">
             <span class="big-num" aria-hidden="true">02</span>
-            <h3>Pick your window</h3>
-            <p>Choose a day and a morning, afternoon or evening window. Same-day and next-day spots open up across the metro.</p>
+            <h3>Get an instant price</h3>
+            <p>A real starting price in 30 seconds. No waiting on a callback, no week-long quote.</p>
           </div>
           <div class="how-num-card reveal">
             <span class="big-num" aria-hidden="true">03</span>
-            <h3>We haul it away</h3>
-            <p>Our crew does all the lifting, loading, and sweeping up. You don't even need to be home — we text when it's done and you pay via Venmo. No deposit ever.</p>
+            <h3>We haul it, you're done</h3>
+            <p>Crew shows up same day, loads it, sweeps up. Pay cash or Venmo once it's gone. No deposit ever.</p>
           </div>
         </div>
       </div>
@@ -1239,40 +1275,40 @@
       <div class="wrap">
         <div class="sec-head reveal">
           <span class="eyebrow"><span class="dot" style="background:var(--gold-500);box-shadow:0 0 10px var(--gold-500)"></span> What we take</span>
-          <h2 id="svc-h">Kansas City junk removal for just about anything</h2>
-          <p>From a single couch to a whole construction site, our Kansas City hauling crew clears it out and disposes of it responsibly — donating and recycling whatever we can.</p>
+          <h2 id="svc-h">If it fits in the trailer, it's gone.</h2>
+          <p>From a single couch to a full estate cleanout. We rescue what we can, recycle what we can, dump the rest.</p>
         </div>
         <div class="tilt-grid">
-          <article class="tilt-card reveal">
+          <div class="tilt-outer reveal"><article class="tilt-card">
             <div class="ic-lc"><i data-lucide="sofa" aria-hidden="true"></i></div>
-            <h3>Furniture removal in KC</h3>
-            <p>Couches, sectionals, recliners, mattresses, dressers, desks and office furniture — hauled from any room without you lifting a thing.</p>
-          </article>
-          <article class="tilt-card reveal">
-            <div class="ic-lc"><i data-lucide="refrigerator" aria-hidden="true"></i></div>
-            <h3>Appliance removal in KC</h3>
-            <p>Refrigerators, washers, dryers, stoves, dishwashers and water heaters disconnected and carried out — recycled the right way.</p>
-          </article>
-          <article class="tilt-card reveal">
+            <h3>Furniture</h3>
+            <p>Couches, mattresses, dressers, that recliner nobody sits in.</p>
+          </article></div>
+          <div class="tilt-outer reveal"><article class="tilt-card">
+            <div class="ic-lc"><i data-lucide="washing-machine" aria-hidden="true"></i></div>
+            <h3>Appliances</h3>
+            <p>Fridges, washers, dryers, water heaters. We disconnect and go.</p>
+          </article></div>
+          <div class="tilt-outer reveal"><article class="tilt-card">
             <div class="ic-lc"><i data-lucide="trees" aria-hidden="true"></i></div>
-            <h3>Yard waste removal in KC</h3>
-            <p>Branches, brush, leaves, sod, fencing and storm debris cleared from the yard and hauled off in one trip.</p>
-          </article>
-          <article class="tilt-card reveal">
-            <div class="ic-lc"><i data-lucide="hard-hat" aria-hidden="true"></i></div>
-            <h3>Construction debris removal in KC</h3>
-            <p>Drywall, lumber, flooring, tile, concrete and remodel debris cleared for contractors and DIYers — keep the jobsite moving.</p>
-          </article>
-          <article class="tilt-card reveal">
-            <div class="ic-lc"><i data-lucide="home" aria-hidden="true"></i></div>
-            <h3>Garage &amp; estate cleanouts</h3>
-            <p>Full garage, basement, attic and estate cleanouts handled start to finish — sorted, hauled and swept.</p>
-          </article>
-          <article class="tilt-card reveal">
-            <div class="ic-lc"><i data-lucide="plus-circle" aria-hidden="true"></i></div>
-            <h3>Hot tubs, tires &amp; more</h3>
-            <p>Hot tubs, swing sets, sheds, tires, electronics and the odd "can you even take this?" item. If it's legal to haul, we'll take it.</p>
-          </article>
+            <h3>Yard &amp; construction</h3>
+            <p>Branches, fencing, drywall, old decking, post-project debris.</p>
+          </article></div>
+          <div class="tilt-outer reveal"><article class="tilt-card">
+            <div class="ic-lc"><i data-lucide="house" aria-hidden="true"></i></div>
+            <h3>Garage &amp; estate</h3>
+            <p>Full garage, basement, or estate cleanout. Top to bottom.</p>
+          </article></div>
+          <div class="tilt-outer reveal"><article class="tilt-card">
+            <div class="ic-lc"><i data-lucide="dumbbell" aria-hidden="true"></i></div>
+            <h3>Hot tubs &amp; heavy</h3>
+            <p>Hot tubs, pianos, safes, gym gear. The stuff nobody wants to lift.</p>
+          </article></div>
+          <div class="tilt-outer reveal"><article class="tilt-card">
+            <div class="ic-lc"><i data-lucide="truck" aria-hidden="true"></i></div>
+            <h3>Anything else</h3>
+            <p>If it fits in the trailer and it's legal, it's gone. Just ask.</p>
+          </article></div>
         </div>
         <div style="text-align:center;margin-top:44px" class="reveal">
           <a class="btn-gold" href="#book">Get my price <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
@@ -1285,48 +1321,56 @@
       <div class="wrap">
         <div class="sec-head reveal">
           <span class="eyebrow"><span class="dot" style="background:var(--gold-500);box-shadow:0 0 10px var(--gold-500)"></span> The before &amp; after</span>
-          <h2 id="ba-h">Cluttered to clear, same day</h2>
-          <p>Drag the handle to see the difference. Add <code style="font-family:var(--font-mono);font-size:13px;background:var(--green-850);padding:2px 6px;border-radius:4px">haulkc-before.png</code> and <code style="font-family:var(--font-mono);font-size:13px;background:var(--green-850);padding:2px 6px;border-radius:4px">haulkc-after.png</code> to the repo root to activate this slider.</p>
-        </div>
-        <div class="ba-slider-outer reveal">
-          <div class="ba-slider-wrap" id="baSlider" role="img" aria-label="Before and after junk removal comparison">
-            <!-- before layer (bottom) -->
-            <img src="/haulkc-before.png" alt="Before junk removal" class="ba-img"
-                 onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-            <div class="ba-placeholder-img" style="display:none">Before — add haulkc-before.png to repo root</div>
-            <!-- after layer (clipped on top) -->
-            <div class="ba-after-layer" id="baAfter">
-              <img src="/haulkc-after.png" alt="After junk removal"
+        <div class="ba-layout reveal">
+          <div class="ba-copy">
+            <span class="eyebrow"><span class="dot" style="background:var(--gold-500);box-shadow:0 0 10px var(--gold-500)"></span> Real KC cleanouts</span>
+            <h2 id="ba-h">One garage. Same day.</h2>
+            <p>Packed with debris, drywall, and an old fridge. We cleared it, swept it, and handed it back the same afternoon. Drag the handle to watch it go.</p>
+            <div class="ba-meta">Full trailer haul · One afternoon</div>
+          </div>
+          <div class="ba-slider-outer">
+            <div class="ba-slider-wrap" id="baSlider" role="img" aria-label="Before and after junk removal comparison — drag to compare">
+              <!-- before layer (bottom) -->
+              <img src="/haulkc-before.png" alt="Before junk removal — packed garage" class="ba-img"
                    onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-              <div class="ba-placeholder-img" style="display:none;background:var(--green-700)">After — add haulkc-after.png to repo root</div>
+              <div class="ba-placeholder-img" style="display:none">Before — add haulkc-before.png to repo root</div>
+              <!-- after layer (clipped on top) -->
+              <div class="ba-after-layer" id="baAfter">
+                <img src="/haulkc-after.png" alt="After junk removal — cleared garage"
+                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                <div class="ba-placeholder-img" style="display:none;background:var(--green-700)">After — add haulkc-after.png</div>
+              </div>
+              <div class="ba-handle" id="baHandle"></div>
+              <span class="ba-lbl l">Before</span>
+              <span class="ba-lbl r">After</span>
             </div>
-            <div class="ba-handle" id="baHandle"></div>
-            <span class="ba-lbl l">Before</span>
-            <span class="ba-lbl r">After</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- STATS -->
-    <section class="band brand" aria-label="HaulKC by the numbers">
+    <!-- TRUST / STATS -->
+    <section class="band alt" aria-labelledby="trust-h">
       <div class="wrap">
-        <div class="sec-head reveal" style="margin-bottom:clamp(28px,4vw,44px)">
-          <span class="eyebrow"><span class="dot" style="background:var(--gold-500);box-shadow:0 0 10px var(--gold-500)"></span> By the numbers</span>
-          <h2>Kansas City trusts us with the big hauls</h2>
-        </div>
-        <div class="stats-row reveal">
-          <div class="stat-card">
-            <span class="s-num">500+</span>
-            <span class="s-lbl">Loads hauled across KC</span>
+        <div class="trust-layout reveal">
+          <div class="trust-copy">
+            <span class="eyebrow"><span class="dot" style="background:var(--gold-500);box-shadow:0 0 10px var(--gold-500)"></span> Why KC calls us</span>
+            <h2 id="trust-h">Local crew. Same day. No runaround.</h2>
+            <p>We're KC locals hauling for KC neighbors. You get a straight price, a crew that shows up, and a driveway that's clean when we leave.</p>
           </div>
-          <div class="stat-card">
-            <span class="s-num">7</span>
-            <span class="s-lbl">Days a week, 8am–8pm</span>
-          </div>
-          <div class="stat-card">
-            <span class="s-num">4.9★</span>
-            <span class="s-lbl">Average customer rating</span>
+          <div class="stats-panel">
+            <div class="stat-card">
+              <span class="s-num">500+</span>
+              <span class="s-lbl">Loads hauled across the metro</span>
+            </div>
+            <div class="stat-card">
+              <span class="s-num">7 days</span>
+              <span class="s-lbl">A week, same-day windows</span>
+            </div>
+            <div class="stat-card">
+              <span class="s-num">4.9★</span>
+              <span class="s-lbl">From KC neighbors</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1400,42 +1444,44 @@
     <!-- PRICING -->
     <section id="pricing" class="band" aria-labelledby="pricing-h">
       <div class="wrap">
-        <div class="sec-head reveal">
-          <span class="eyebrow"><span class="dot" style="background:var(--gold-500);box-shadow:0 0 10px var(--gold-500)"></span> Transparent pricing</span>
-          <h2 id="pricing-h">Upfront prices, confirmed on-site</h2>
-          <p>Pick the tier that matches your load. Final price confirmed before we lift a thing — no surprises, no deposits.</p>
+        <div class="pricing-panel reveal">
+          <div class="sec-head">
+            <span class="eyebrow"><span class="dot" style="background:var(--gold-500);box-shadow:0 0 10px var(--gold-500)"></span> Pricing</span>
+            <h2 id="pricing-h">Pick a load. See the price.</h2>
+            <p>You pay for the space you fill in the trailer. Starting prices below.</p>
+          </div>
+          <div class="pricing-grid">
+            <div class="price-card">
+              <div class="t-name">A few things</div>
+              <div class="t-price"><sup>from </sup>$100</div>
+              <div class="t-gauge"><i style="width:22%"></i></div>
+              <div class="t-desc">A couch and a mattress, a few boxes.</div>
+              <a class="t-cta" href="#book">Book this load</a>
+            </div>
+            <div class="price-card">
+              <div class="t-name">Quarter load</div>
+              <div class="t-price"><sup>from </sup>$175</div>
+              <div class="t-gauge"><i style="width:38%"></i></div>
+              <div class="t-desc">A small room or a corner of the garage.</div>
+              <a class="t-cta" href="#book">Book this load</a>
+            </div>
+            <div class="price-card featured">
+              <div class="t-name">Half load</div>
+              <div class="t-price"><sup>from </sup>$275</div>
+              <div class="t-gauge"><i style="width:62%"></i></div>
+              <div class="t-desc">A garage or big closet cleanout.</div>
+              <a class="t-cta" href="#book">Book this load</a>
+            </div>
+            <div class="price-card">
+              <div class="t-name">Full trailer</div>
+              <div class="t-price"><sup>from </sup>$450</div>
+              <div class="t-gauge"><i style="width:100%"></i></div>
+              <div class="t-desc">Whole-house, estate, or post-reno haul.</div>
+              <a class="t-cta" href="#book">Book this load</a>
+            </div>
+          </div>
+          <p style="text-align:center;margin-top:28px;font-size:14px;color:var(--green-200);line-height:1.6">Final price is confirmed on-site once the crew sees the load. Pay cash or Venmo when it's gone. No deposit, no callbacks.</p>
         </div>
-        <div class="pricing-grid">
-          <div class="price-card reveal">
-            <div class="t-name">A few items</div>
-            <div class="t-price"><sup>from </sup>$100</div>
-            <div class="t-gauge"><i style="width:22%"></i></div>
-            <div class="t-desc">A couch, a mattress, a few boxes — small loads handled fast.</div>
-            <a class="t-cta" href="#book">Book this load</a>
-          </div>
-          <div class="price-card reveal">
-            <div class="t-name">Quarter trailer</div>
-            <div class="t-price"><sup>from </sup>$175</div>
-            <div class="t-gauge"><i style="width:38%"></i></div>
-            <div class="t-desc">A small room's worth — bedroom set, office cleanout, garden debris.</div>
-            <a class="t-cta" href="#book">Book this load</a>
-          </div>
-          <div class="price-card featured reveal">
-            <div class="t-name">Half trailer</div>
-            <div class="t-price"><sup>from </sup>$275</div>
-            <div class="t-gauge"><i style="width:62%"></i></div>
-            <div class="t-desc">A garage or big closet cleanout — most popular load for KC homeowners.</div>
-            <a class="t-cta" href="#book">Book this load</a>
-          </div>
-          <div class="price-card reveal">
-            <div class="t-name">Full trailer</div>
-            <div class="t-price"><sup>from </sup>$450</div>
-            <div class="t-gauge"><i style="width:100%"></i></div>
-            <div class="t-desc">A whole garage, big move-out, or full estate cleanout done in one trip.</div>
-            <a class="t-cta" href="#book">Book this load</a>
-          </div>
-        </div>
-        <p style="text-align:center;margin-top:24px;font-size:13px;color:var(--green-400);font-family:var(--font-mono)">All prices are starting points. Final amount confirmed on-site before work begins. Add-ons available at checkout above.</p>
       </div>
     </section>
 
@@ -1493,13 +1539,14 @@
     </section>
 
     <!-- FINAL CTA -->
-    <section class="band brand" aria-labelledby="cta-h">
+    <section class="band" style="background:radial-gradient(ellipse 100% 80% at 50% 50%, var(--green-850) 0%, var(--green-950) 100%);border-top:none" aria-labelledby="cta-h">
       <div class="cta-final">
-        <h2 id="cta-h">Ready to get it gone?</h2>
-        <p>Get your upfront price in 30 seconds, or call the crew direct. No deposit, pay when it's done.</p>
+        <span class="eyebrow" style="justify-content:center;margin-bottom:24px"><span class="dot"></span> Same-day junk removal · Kansas City</span>
+        <h2 id="cta-h" style="font-size:clamp(48px,10vw,108px);letter-spacing:-0.02em;line-height:0.96">Consider it gone<span style="color:var(--gold-500)">.</span></h2>
+        <p>Tell us what you've got and we'll take it from here. Fast, local, no callbacks.</p>
         <div class="cta-btns">
-          <a class="btn-gold" href="#book">Get my free price <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
-          <a class="btn-ghost" href="tel:8163845010"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg> (816) 384-5010</a>
+          <a class="btn-gold" href="#book" style="height:58px;font-size:17px">Get my price <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg></a>
+          <a class="btn-ghost" href="tel:8163845010" style="height:58px;font-size:17px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg> (816) 384-5010</a>
         </div>
       </div>
     </section>
@@ -1851,20 +1898,22 @@
     }
   })();
 
-  /* ===== TILT CARDS ===== */
-  document.querySelectorAll('.tilt-card').forEach(card => {
-    card.addEventListener('pointermove', e => {
-      const r = card.getBoundingClientRect();
-      const dx = (e.clientX - r.left - r.width/2) / (r.width/2);
-      const dy = (e.clientY - r.top  - r.height/2) / (r.height/2);
-      card.style.transition = '';
-      card.style.transform = `perspective(700px) rotateY(${dx*9}deg) rotateX(${-dy*9}deg) translateZ(16px)`;
+  /* ===== TILT CARDS (hover-capable only) ===== */
+  if (window.matchMedia('(hover: hover)').matches) {
+    document.querySelectorAll('.tilt-card').forEach(card => {
+      card.addEventListener('pointermove', e => {
+        const r = card.getBoundingClientRect();
+        const dx = (e.clientX - r.left - r.width/2) / (r.width/2);
+        const dy = (e.clientY - r.top  - r.height/2) / (r.height/2);
+        card.style.transition = 'border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out)';
+        card.style.transform = `rotateY(${dx*9}deg) rotateX(${-dy*9}deg) translateZ(16px)`;
+      });
+      card.addEventListener('pointerleave', () => {
+        card.style.transition = 'transform 0.4s cubic-bezier(0.22,0.61,0.36,1), border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out)';
+        card.style.transform = '';
+      });
     });
-    card.addEventListener('pointerleave', () => {
-      card.style.transition = 'transform 0.4s cubic-bezier(0.22,0.61,0.36,1)';
-      card.style.transform = '';
-    });
-  });
+  }
 
   /* ===== BEFORE/AFTER SLIDER ===== */
   (function(){
