@@ -1,0 +1,6 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="HaulKC mark on light">
+  <rect width="120" height="120" rx="22" fill="#f0ede6"></rect>
+  <rect x="3" y="3" width="114" height="114" rx="19" fill="none" stroke="#1a3a2a" stroke-opacity="0.25" stroke-width="2"></rect>
+  <path d="M34 38 L58 60 L34 82" stroke="#a98b54" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+  <path d="M62 38 L86 60 L62 82" stroke="#1a3a2a" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+</svg>
