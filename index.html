@@ -1214,9 +1214,9 @@
             <div class="field">
               <label class="q" id="winLabel">Time of day</label>
               <div class="windows" id="windows" role="group" aria-labelledby="winLabel">
-                <button type="button" class="win" data-key="Morning">Morning<span class="t">8am–12pm</span></button>
-                <button type="button" class="win" data-key="Afternoon">Afternoon<span class="t">12–5pm</span></button>
-                <button type="button" class="win" data-key="Evening">Evening<span class="t">5–8pm</span></button>
+                <button type="button" class="win" data-key="Morning">Morning<span class="t">8am–12pm CT</span></button>
+                <button type="button" class="win" data-key="Afternoon">Afternoon<span class="t">12–5pm CT</span></button>
+                <button type="button" class="win" data-key="Evening">Evening<span class="t">5–8pm CT</span></button>
               </div>
             </div>
           </div>
@@ -2064,7 +2064,8 @@
           <div class="ln"><span class="k">Address</span><span class="v">${b.address}, ${b.zip}</span></div>
           <div class="ln"><span class="k">Phone</span><span class="v">${b.phone}</span></div>
         </div>
-        <p class="fineprint" style="margin-top:20px">${saved ? "✓ Booking saved — the crew has been emailed." : "We got your request — if you do not hear back soon, text us."}</p>
+        <p class="fineprint" style="margin-top:20px">${saved ? "✓ Booking saved — the crew has been notified." : "We got your request — if you do not hear back soon, text us."}</p>
+        ${b.email ? `<p class="fineprint" style="margin-top:4px">✓ Confirmation sent to <strong>${b.email}</strong></p>` : ""}
         <p class="fineprint" style="margin-top:8px">Questions? Call or text <a href="tel:8163845010" style="color:var(--gold-500);font-weight:700;text-decoration:none">(816) 384-5010</a></p>
         <p class="disclaimer" style="max-width:420px;margin:14px auto 0;text-align:center">All online quotes are estimates. Final pricing is confirmed on-site before work begins.</p>
       </div>`;
